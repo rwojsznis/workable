@@ -2,6 +2,8 @@
 
 Dead-simple Ruby API client for [workable.com][1]. No extra runtime dependencies. Ruby >= 1.9.3.
 
+Uses v2 API provided by workable.
+
 ## Installation
 
 Add this line to your application's Gemfile:
