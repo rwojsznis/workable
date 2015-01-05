@@ -1,5 +1,8 @@
 # Workable
 
+[![Build Status](https://travis-ci.org/emq/workable.svg?branch=master)](https://travis-ci.org/emq/workable)
+[![Coverage Status](https://coveralls.io/repos/emq/workable/badge.png?branch=master)](https://coveralls.io/r/emq/workable?branch=master)
+
 Dead-simple Ruby API client for [workable.com][1]. No extra runtime dependencies. Ruby >= 1.9.3.
 
 Uses v2 API provided by workable.
