@@ -24,7 +24,7 @@ module Workable
     attr_reader :api_key, :subdomain
 
     def api_url
-      'https://www.workable.com/spi/accounts/%s' % subdomain
+      'https://www.workable.com/spi/v2/accounts/%s' % subdomain
     end
 
     def get_request(url)
@@ -54,6 +54,7 @@ module Workable
 
     def headers
       {
+        'Accept' => 'application/json',
         'Authorization' => "Bearer #{api_key}",
         'User-Agent' => 'Workable Ruby Client'
       }
