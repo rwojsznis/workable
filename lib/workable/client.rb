@@ -36,11 +36,20 @@ module Workable
       request  = Net::HTTP::Get.new(uri.request_uri, headers)
       response = http.request(request)
 
-      raise Errors::NotAuthorized, response.body if response.code.to_i == 401
-      raise Errors::NotFound, response.body if response.code.to_i == 404
-      raise Errors::InvalidResponse, "Response code: #{response.code}" if response.code.to_i != 200
+      validate!(response)
 
       JSON.parse(response.body)
+    end
+
+    def validate!(response)
+      case response.code.to_i
+      when 401
+        raise Errors::NotAuthorized, response.body
+      when 404
+        raise Errors::NotFound, response.body
+      else
+        raise Errors::InvalidResponse, "Response code: #{response.code}" if response.code.to_i != 200
+      end
     end
 
     def headers
