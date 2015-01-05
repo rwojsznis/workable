@@ -15,6 +15,10 @@ module Workable
       Job.new(get_request"jobs/#{shortcode}")
     end
 
+    def job_candidates(shortcode)
+      get_request("jobs/#{shortcode}/candidates")['candidates']
+    end
+
     private
 
     attr_reader :api_key, :subdomain
@@ -33,6 +37,7 @@ module Workable
       response = http.request(request)
 
       raise Errors::NotAuthorized, response.body if response.code.to_i == 401
+      raise Errors::NotFound, response.body if response.code.to_i == 404
       raise Errors::InvalidResponse, "Response code: #{response.code}" if response.code.to_i != 200
 
       JSON.parse(response.body)

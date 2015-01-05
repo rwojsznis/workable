@@ -20,7 +20,7 @@ describe Workable::Client do
     it 'returns array of posted jobs' do
       stub_request(:get, "https://www.workable.com/spi/accounts/subdomain/jobs?phase=published")
         .with(headers: { 'Authorization'=>'Bearer test', 'User-Agent'=>'Workable Ruby Client' })
-        .to_return(status: 200, body: jobs_index_fixture, headers: {})
+        .to_return(status: 200, body: jobs_index_json_fixture, headers: {})
 
       expect(client.jobs).to be_kind_of(Array)
     end
@@ -48,6 +48,24 @@ describe Workable::Client do
         .to_return(status: 200, body: job_json_fixture, headers: {})
 
       expect(client.job_details('03FF356C8B')).to be_kind_of(Workable::Job)
+    end
+
+    it 'raises an exception when job is not found' do
+      stub_request(:get, "https://www.workable.com/spi/accounts/subdomain/jobs/invalid")
+        .to_return(status: 404, body: '{"error":"Not found"}', headers: {})
+
+      expect { client.job_details('invalid') }.to raise_error(Workable::Errors::NotFound)
+    end
+  end
+
+  describe '#candidates' do
+    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
+
+    it 'returns array of candidates for given job' do
+      stub_request(:get, "https://www.workable.com/spi/accounts/subdomain/jobs/03FF356C8B/candidates")
+        .to_return(status: 200, body: job_candidates_json_fixture, headers: {})
+
+      expect(client.job_candidates('03FF356C8B')).to be_kind_of(Array)
     end
   end
 

@@ -1,6 +1,6 @@
 # dead-simple methods instead of full vcr cassettes, because why not?
 
-def jobs_index_fixture
+def jobs_index_json_fixture
   JSON.generate({
     "name" => "wojsznis",
     "description" => nil,
@@ -62,5 +62,55 @@ def job_json_fixture
     "function": "Engineering",
     "experience": "Mid-Senior level",
     "education": "Professional"
+  })
+end
+
+def job_candidates_json_fixture
+  JSON.generate({
+    "candidates": [
+      {
+        "key": "f7087",
+        "name": "Test LastName",
+        "firstname": "Test",
+        "lastname": "LastName",
+        "headline": "headline",
+        "account": {
+          "subdomain": "wojsznis",
+          "name": "wojsznis"
+        },
+        "job": {
+          "shortcode": "03FF356C8B",
+          "title": "Ruby on Rails dev"
+        },
+        "stage": "Applied",
+        "disqualified": false,
+        "sourced": false,
+        "profile_url": "http://wojsznis.workable.com/backend/jobs/30606/candidates/1010613",
+        "address": "Address",
+        "phone": "",
+        "email": "example@test.com",
+        "outbound_mailbox": "eaqpdpbc@outbound.workablemail.com",
+        "domain": "unknown",
+        "created_at": "2015-01-05 11:56:40",
+        "updated_at": "2015-01-05 11:56:48",
+        "cover_letter": "",
+        "summary": "",
+        "education_entries": [ ],
+        "experience_entries": [ ],
+        "skills": [ ],
+        "answers": [
+          {
+            "question": {
+                "body": "Why you want this job?"
+            },
+            "answer": {
+                "body": "<p>Sample answer</p>"
+            }
+          }
+        ],
+        "resume_url": "",
+        "tags": [ ]
+      }
+    ]
   })
 end
