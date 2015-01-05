@@ -1,3 +1,4 @@
+# coding: utf-8
 # dead-simple methods instead of full vcr cassettes, because why not?
 
 def jobs_index_json_fixture
@@ -67,7 +68,7 @@ end
 
 def job_candidates_json_fixture
   JSON.generate({
-    "candidates": [
+    "candidates" => [
       {
         "key" => "f7087",
         "name" => "Test LastName",
