@@ -24,7 +24,7 @@ module Workable
     attr_reader :api_key, :subdomain
 
     def api_url
-      'https://www.workable.com/spi/v2/accounts/%s' % subdomain
+      "https://www.workable.com/spi/v%s/accounts/%s" % [Workable::API_VERSION, subdomain]
     end
 
     def get_request(url)

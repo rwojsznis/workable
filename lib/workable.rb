@@ -10,6 +10,5 @@ require_relative "workable/client"
 require_relative "workable/job"
 
 module Workable
-    # Your code goes here...
-
+  API_VERSION = "2".freeze
 end
