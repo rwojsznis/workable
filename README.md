@@ -38,6 +38,8 @@ client.jobs # => [#<Workable::Job>, #<Workable::Job>]
 
 shortcode = 'job_shortcode'
 
+# API queries are not cached (at all) - it's up to you to cache results one way or another
+
 client.job_details(shortcode) # => #<Workable::Job>
 client.job_candidates(shortcode) # => Array of hashes
 
