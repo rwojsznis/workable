@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 require_relative '../lib/workable'
 require_relative 'fixtures'
 require 'webmock/rspec'

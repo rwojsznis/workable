@@ -8,10 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Workable::VERSION
   spec.authors       = ["Rafał Wojsznis"]
   spec.email         = ["rafal.wojsznis@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/emq/workable"
   spec.license       = "MIT"
+  spec.summary = spec.description = "Dead-simple Ruby API client for workable.com"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -24,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.1.0'
   spec.add_development_dependency 'webmock', '~> 1.20.4'
+  spec.add_development_dependency 'coveralls', '~> 0.7.2'
 end
