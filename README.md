@@ -1,5 +1,6 @@
 # Workable
 
+[![Code Climate](https://codeclimate.com/github/emq/workable/badges/gpa.svg)](https://codeclimate.com/github/emq/workable)
 [![Build Status](https://travis-ci.org/emq/workable.svg?branch=master)](https://travis-ci.org/emq/workable)
 [![Coverage Status](https://coveralls.io/repos/emq/workable/badge.png?branch=master)](https://coveralls.io/r/emq/workable?branch=master)
 
