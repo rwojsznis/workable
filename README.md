@@ -3,6 +3,8 @@
 [![Code Climate](https://codeclimate.com/github/emq/workable/badges/gpa.svg)](https://codeclimate.com/github/emq/workable)
 [![Build Status](https://travis-ci.org/emq/workable.svg?branch=master)](https://travis-ci.org/emq/workable)
 [![Coverage Status](https://coveralls.io/repos/emq/workable/badge.png?branch=master)](https://coveralls.io/r/emq/workable?branch=master)
+[![Gem Version](https://badge.fury.io/rb/workable.svg)](http://badge.fury.io/rb/workable)
+[![Dependency Status](https://gemnasium.com/emq/workable.svg)](https://gemnasium.com/emq/workable)
 
 Dead-simple Ruby API client for [workable.com][1]. No extra runtime dependencies. Ruby >= 1.9.3.
 
