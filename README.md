@@ -37,6 +37,8 @@ Internal interface / api is in early stage, so far you can:
 
 ``` ruby
 client = Workable::Client.new(api_key: 'api_key', subdomain: 'your_subdomain')
+
+# takes optional phase argument (string): 'published' (default), 'draft', 'closed' or 'archived'
 client.jobs # => [#<Workable::Job>, #<Workable::Job>]
 
 shortcode = 'job_shortcode'
