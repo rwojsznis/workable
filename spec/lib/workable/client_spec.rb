@@ -58,6 +58,18 @@ describe Workable::Client do
     end
   end
 
+  describe '#job_questions' do
+    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
+
+    it 'returns questions for given job' do
+      stub_request(:get, "https://www.workable.com/spi/v2/accounts/subdomain/jobs/03FF356C8B/questions")
+        .to_return(status: 200, body: job_questions_json_fixture, headers: {})
+
+      expect(client.job_questions('03FF356C8B')).to be_kind_of(Array)
+    end
+
+  end
+
   describe '#candidates' do
     let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
 
@@ -66,6 +78,17 @@ describe Workable::Client do
         .to_return(status: 200, body: job_candidates_json_fixture, headers: {})
 
       expect(client.job_candidates('03FF356C8B')).to be_kind_of(Array)
+    end
+  end
+
+  describe '#stages' do
+    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
+
+    it 'returns array of stages' do
+      stub_request(:get, "https://www.workable.com/spi/v2/accounts/subdomain/stages")
+        .to_return(status: 200, body: stages_json_fixture, headers: {})
+
+      expect(client.stages).to be_kind_of(Array)
     end
   end
 
