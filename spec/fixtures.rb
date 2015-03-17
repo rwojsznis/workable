@@ -115,3 +115,24 @@ def job_candidates_json_fixture
     ]
   })
 end
+
+def stages_json_fixture
+  JSON.generate({"stages" => [
+    {"slug"=>"sourced",    "name"=>"Sourced",    "kind"=>"sourced",     "position"=>1},
+    {"slug"=>"applied",    "name"=>"Applied",    "kind"=>"applied",     "position"=>2},
+    {"slug"=>"soft-talk",  "name"=>"Soft Talk",  "kind"=>"interview",   "position"=>3},
+    {"slug"=>"wait",       "name"=>"Wait",       "kind"=>"shortlisted", "position"=>4},
+    {"slug"=>"assessment", "name"=>"Assessment", "kind"=>"assessment",  "position"=>5},
+    {"slug"=>"review",     "name"=>"Review",     "kind"=>"assessment",  "position"=>6},
+    {"slug"=>"tech-talk",  "name"=>"Tech Talk",  "kind"=>"interview",   "position"=>7},
+    {"slug"=>"prepare",    "name"=>"Prepare",    "kind"=>"interview",   "position"=>8},
+    {"slug"=>"ready",      "name"=>"Ready",      "kind"=>"shortlisted", "position"=>9},
+    {"slug"=>"later",      "name"=>"Later",      "kind"=>"shortlisted", "position"=>10}
+  ]})
+end
+
+def job_questions_json_fixture
+  JSON.generate({"questions" => [
+    {"key"=>"fe8", "body"=>"How many fingers do you have?", "type"=>"free_text"}
+  ]})
+end

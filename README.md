@@ -45,8 +45,10 @@ shortcode = 'job_shortcode'
 
 # API queries are not cached (at all) - it's up to you to cache results one way or another
 
-client.job_details(shortcode) # => #<Workable::Job>
-client.job_candidates(shortcode) # => Array of hashes
+client.stages # => Array of hashes
+client.job_details(shortcode)   # => #<Workable::Job>
+client.job_questions(shortcode) # => Array of hashes
+client.job_candidates(shortcode, stage_slug) # => Array of hashes (skip stage_slug for all stages)
 
 # Possible errors (each one inherits from Workable::Errors::WorkableError)
 Workable::Errors::InvalidConfiguration # missing api_key / subdomain

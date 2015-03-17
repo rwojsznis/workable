@@ -15,8 +15,17 @@ module Workable
       Job.new(get_request"jobs/#{shortcode}")
     end
 
-    def job_candidates(shortcode)
+    def job_candidates(shortcode, stage_slug = nil)
+      shortcode = "#{shortcode}/#{stage_slug}" unless stage_slug.nil?
       get_request("jobs/#{shortcode}/candidates")['candidates']
+    end
+
+    def job_questions(shortcode)
+      get_request("jobs/#{shortcode}/questions")['questions']
+    end
+
+    def stages
+      get_request("stages")['stages']
     end
 
     private
