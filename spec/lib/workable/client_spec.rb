@@ -79,6 +79,14 @@ describe Workable::Client do
 
       expect(client.job_candidates('03FF356C8B')).to be_kind_of(Array)
     end
+
+    it 'raises exception on to long requests' do
+      stub_request(:get, "https://www.workable.com/spi/v2/accounts/subdomain/jobs?phase=published")
+        .to_return(status: 503, body: '{"error":"Not authorized"}', headers: {})
+
+      expect { client.jobs }.to raise_error(Workable::Errors::RequestToLong)
+    end
+
   end
 
   describe '#stages' do
