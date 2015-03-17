@@ -47,6 +47,8 @@ module Workable
         raise Errors::NotAuthorized, response.body
       when 404
         raise Errors::NotFound, response.body
+      when 503
+        raise Errors::RequestToLong, response.body
       when proc { |code| code != 200 }
         raise Errors::InvalidResponse, "Response code: #{response.code}"
       end
