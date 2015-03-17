@@ -48,7 +48,7 @@ module Workable
       when 404
         raise Errors::NotFound, response.body
       when 503
-        raise Errors::RequestToLong, response.body
+        raise Errors::RequestToLong, "Response code: #{response.code}"
       when proc { |code| code != 200 }
         raise Errors::InvalidResponse, "Response code: #{response.code}"
       end
