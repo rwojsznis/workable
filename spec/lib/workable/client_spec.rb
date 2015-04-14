@@ -47,7 +47,7 @@ describe Workable::Client do
       stub_request(:get, "https://www.workable.com/spi/v2/accounts/subdomain/jobs/03FF356C8B")
         .to_return(status: 200, body: job_json_fixture, headers: {})
 
-      expect(client.job_details('03FF356C8B')).to be_kind_of(Workable::Job)
+      expect(client.job_details('03FF356C8B')).to be_kind_of(Hash)
     end
 
     it 'raises an exception when job is not found' do

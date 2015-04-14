@@ -30,7 +30,7 @@ module Workable
     def initialize(options = {})
       @api_key   = options.fetch(:api_key)   { fail Errors::InvalidConfiguration, "Missing api_key argument"   }
       @subdomain = options.fetch(:subdomain) { fail Errors::InvalidConfiguration, "Missing subdomain argument" }
-      @transform_to = options[:transform_to]
+      @transform_to = options[:transform_to] || {}
     end
 
     # request jobs of given type
