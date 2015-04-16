@@ -150,15 +150,7 @@ module Workable
     # @param result [Hash|Array|nil] the value to transform, can be nothing, `Hash` of values or `Array` of `Hash`es
     # @return transformed result if transformation exists for type, raw result otherwise
     def transform_to(type, result)
-      return result unless @transform_to[type]
-      case result
-      when nil
-        result
-      when Array
-        result.map{|values| @transform_to[type].call(values) }
-      else
-        @transform_to[type].call(result)
-      end
+      transform(@transform_to[type], result)
     end
 
     # transform input using given method if defined
@@ -166,14 +158,23 @@ module Workable
     # @param result [Hash|Array|nil] the value to transform, can be nothing, `Hash` of values or `Array` of `Hash`es
     # @return transformed input if transformation exists for type, raw input otherwise
     def transform_from(type, input)
-      return input unless @transform_from[type]
-      case input
+      transform(@transform_from[type], input)
+    end
+
+    # selects transformation strategy based on the inputs
+    # @param transformation [Method|Proc|nil] the transformation to perform
+    # @param data           [Hash|Array|nil]  the data to transform
+    # @return               [Object|nil]
+    #    results of the transformation if given, raw data otherwise
+    def transform(transformation, data)
+      return data unless transformation
+      case data
       when nil
-        input
+        data
       when Array
-        input.map{|values| @transform_from[type].call(values) }
+        data.map{|datas| transformation.call(datas) }
       else
-        @transform_from[type].call(input)
+        transformation.call(data)
       end
     end
 

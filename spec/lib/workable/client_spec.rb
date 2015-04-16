@@ -116,17 +116,6 @@ describe Workable::Client do
       expect(result).to be_kind_of(OpenStruct)
       expect(result.name).to eq("Tom")
     end
-
-    it "transforms candidates" do
-      result = client.send(:transform_to, :candidate, [{:name => "Tom"}, {:name => "Alice"}])
-      expect(result).to be_kind_of(Array)
-      expect(result.map(&:class)).to eq([OpenStruct, OpenStruct])
-    end
-
-    it "does not transform stage" do
-      result = client.send(:transform_to, :stage, {:slug => "sourced"})
-      expect(result).to eq({:slug => "sourced"})
-    end
   end
 
   describe "#transform_from" do
@@ -141,20 +130,35 @@ describe Workable::Client do
     }
 
     it "transforms candidate" do
-      result = client.send(:transform_from, :candidate, OpenStruct.new({:name => "Tom"}))
-      expect(result).to be_kind_of(Hash)
-      expect(result[:name]).to eq("Tom")
+      input = client.send(:transform_from, :candidate, OpenStruct.new({:name => "Tom"}))
+      expect(input).to be_kind_of(Hash)
+      expect(input[:name]).to eq("Tom")
+    end
+  end
+
+  describe "#transform" do
+    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
+
+    it "transforms one" do
+      result = client.send(:transform, OpenStruct.method(:new), {:name => "Tom"})
+      expect(result).to be_kind_of(OpenStruct)
+      expect(result.name).to eq("Tom")
     end
 
-    it "transforms candidates" do
-      input = client.send(:transform_from, :candidate, [OpenStruct.new({:name => "Tom"}), OpenStruct.new({:name => "Alice"})])
-      expect(input).to be_kind_of(Array)
-      expect(input.map(&:class)).to eq([Hash, Hash])
+    it "transforms many" do
+      data = client.send(:transform, OpenStruct.method(:new), [{:name => "Tom"}, {:name => "Alice"}])
+      expect(data).to be_kind_of(Array)
+      expect(data.map(&:class)).to eq([OpenStruct, OpenStruct])
     end
 
-    it "does not transform stage" do
-      input = client.send(:transform_from, :stage, OpenStruct.new({:slug => "sourced"}))
-      expect(input).to eq(OpenStruct.new({:slug => "sourced"}))
+    it "does not transform nil" do
+      data = client.send(:transform, OpenStruct.method(:new), nil)
+      expect(data).to eq(nil)
+    end
+
+    it "does not transform without transformation" do
+      data = client.send(:transform, nil, OpenStruct.new({:slug => "sourced"}))
+      expect(data).to eq(OpenStruct.new({:slug => "sourced"}))
     end
   end
 
