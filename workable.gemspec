@@ -6,8 +6,8 @@ require 'workable/version'
 Gem::Specification.new do |spec|
   spec.name          = "workable"
   spec.version       = Workable::VERSION
-  spec.authors       = ["Rafał Wojsznis"]
-  spec.email         = ["rafal.wojsznis@gmail.com"]
+  spec.authors       = ["Rafał Wojsznis", "Michal Papis"]
+  spec.email         = ["rafal.wojsznis@gmail.com", "mpapis@gmail.com"]
   spec.homepage      = "https://github.com/emq/workable"
   spec.license       = "MIT"
   spec.summary = spec.description = "Dead-simple Ruby API client for workable.com"
