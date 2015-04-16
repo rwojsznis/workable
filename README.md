@@ -33,22 +33,28 @@ Internal interface / api is in early stage, so far you can:
 - fetch job details
 - fetch candidates for given job
 
-**Example:**
+### Example
 
 ``` ruby
 client = Workable::Client.new(api_key: 'api_key', subdomain: 'your_subdomain')
 
 # takes optional phase argument (string): 'published' (default), 'draft', 'closed' or 'archived'
-client.jobs # => [#<Workable::Job>, #<Workable::Job>]
+client.jobs # => Array of hashes
 
-shortcode = 'job_shortcode'
+shortcode = client.jobs.first["shortcode"]
 
 # API queries are not cached (at all) - it's up to you to cache results one way or another
 
-client.stages # => Array of hashes
-client.job_details(shortcode)   # => #<Workable::Job>
-client.job_questions(shortcode) # => Array of hashes
-client.job_candidates(shortcode, stage_slug) # => Array of hashes (skip stage_slug for all stages)
+client.stages     # => Array of hashes
+client.recruiters # => Array of hashes
+client.job_details(shortcode)    # => Hash
+client.job_questions(shortcode)  # => Array of hashes
+client.job_candidates(shortcode, stage_slug) # => Array of hashes (stage_slug is optional)
+
+# Adding candidates - candidate is a Hash as described in:
+#   http://resources.workable.com/add-candidates-using-api
+
+client.create_job_candidate(candidate, shortcode, stage_slug) # => Hash (stage_slug is optional)
 
 # Possible errors (each one inherits from Workable::Errors::WorkableError)
 Workable::Errors::InvalidConfiguration # missing api_key / subdomain
@@ -58,14 +64,39 @@ Workable::Errors::NotFound        # 404 from workable
 Workable::Errors::RequestToLong   # When the requested result takes to long to calculate, try limiting your query
 ```
 
-## Missing/Todo
+## Transformations
 
-Pull requests are welcomed. So far this gem does not provide:
+When creating `Client` you can specify extra methods/`Proc`s for
+automated transformation of results and input.
 
-- candidates import
-- some sane way for parsing candidates json response
+### Example
 
-_(Personally I don't really need/use it)_
+```ruby
+client = Workable::Client.new(
+  api_key: 'api_key',
+  subdomain: 'your_subdomain'
+  transform_to: {
+    candidate: OpenStruct.method(:new)
+  }
+  transform_from: {
+    candidate: Proc.new { |input| input.to_h }
+  }
+)
+```
+
+The first transformation `to` will make the `Client` return
+`OpenStruct.new(result)` instead of just plain `result` everywhere where
+candidate is expected. In case of Arrays the transformation will be
+applied to every element.
+
+The second transformation `from` will expect an instance of `OpenStruct`
+instead of raw data and will execute the `to_h` on the instance before
+sending it to workable API.
+
+The rest of result will be returned as `Array`s/`Hash`es,
+no transformation will be applied if not defined - raw data will be
+returned.
+
 
 ## Contributing
 
