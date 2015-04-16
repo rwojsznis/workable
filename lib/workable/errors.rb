@@ -5,6 +5,7 @@ module Workable
     class NotAuthorized        < WorkableError; end
     class InvalidResponse      < WorkableError; end
     class NotFound             < WorkableError; end
+    class AlreadyExists        < WorkableError; end
     class RequestToLong        < WorkableError; end
   end
 end

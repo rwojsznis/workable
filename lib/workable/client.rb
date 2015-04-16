@@ -120,18 +120,33 @@ module Workable
     # parse the api response
     def parse!(response)
       case response.code.to_i
-      when 204, 205
+      when 204, 205  # handled no response
         nil
-      when 200...300
+      when 200...300 # handled with response
         JSON.parse(response.body)
       when 401
-        raise Errors::NotAuthorized, response.body
+        raise Errors::NotAuthorized, JSON.parse(response.body)["error"]
       when 404
-        raise Errors::NotFound, response.body
+        raise Errors::NotFound, JSON.parse(response.body)["error"]
+      when 422
+        handle_response_422(response)
       when 503
         raise Errors::RequestToLong, response.body
       else
         raise Errors::InvalidResponse, "Response code: #{response.code} message: #{response.body}"
+      end
+    end
+
+    def handle_response_422(response)
+      data = JSON.parse(response.body)
+      if
+        data["validation_errors"] &&
+        data["validation_errors"]["email"] &&
+        data["validation_errors"]["email"].include?("candidate already exists")
+      then
+        raise Errors::AlreadyExists, data["error"]
+      else
+        raise Errors::NotFound, data["error"]
       end
     end
 
