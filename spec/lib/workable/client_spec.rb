@@ -135,7 +135,7 @@ describe Workable::Client do
         api_key: 'test',
         subdomain: 'subdomain',
         transform_from: {
-          candidate: Proc.new { |input| input.to_h }
+          candidate: lambda { |input| input.marshal_dump }
         }
       )
     }
