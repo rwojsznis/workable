@@ -100,4 +100,62 @@ describe Workable::Client do
     end
   end
 
+  describe "#transform_to" do
+    let(:client){
+      described_class.new(
+        api_key: 'test',
+        subdomain: 'subdomain',
+        transform_to: {
+          candidate: OpenStruct.method(:new)
+        }
+      )
+    }
+
+    it "transforms candidate" do
+      result = client.send(:transform_to, :candidate, {:name => "Tom"})
+      expect(result).to be_kind_of(OpenStruct)
+      expect(result.name).to eq("Tom")
+    end
+
+    it "transforms candidates" do
+      result = client.send(:transform_to, :candidate, [{:name => "Tom"}, {:name => "Alice"}])
+      expect(result).to be_kind_of(Array)
+      expect(result.map(&:class)).to eq([OpenStruct, OpenStruct])
+    end
+
+    it "does not transform stage" do
+      result = client.send(:transform_to, :stage, {:slug => "sourced"})
+      expect(result).to eq({:slug => "sourced"})
+    end
+  end
+
+  describe "#transform_from" do
+    let(:client){
+      described_class.new(
+        api_key: 'test',
+        subdomain: 'subdomain',
+        transform_from: {
+          candidate: Proc.new { |input| input.to_h }
+        }
+      )
+    }
+
+    it "transforms candidate" do
+      result = client.send(:transform_from, :candidate, OpenStruct.new({:name => "Tom"}))
+      expect(result).to be_kind_of(Hash)
+      expect(result[:name]).to eq("Tom")
+    end
+
+    it "transforms candidates" do
+      input = client.send(:transform_from, :candidate, [OpenStruct.new({:name => "Tom"}), OpenStruct.new({:name => "Alice"})])
+      expect(input).to be_kind_of(Array)
+      expect(input.map(&:class)).to eq([Hash, Hash])
+    end
+
+    it "does not transform stage" do
+      input = client.send(:transform_from, :stage, OpenStruct.new({:slug => "sourced"}))
+      expect(input).to eq(OpenStruct.new({:slug => "sourced"}))
+    end
+  end
+
 end
