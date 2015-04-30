@@ -49,7 +49,9 @@ client.stages     # => Array of hashes
 client.recruiters # => Array of hashes
 client.job_details(shortcode)    # => Hash
 client.job_questions(shortcode)  # => Array of hashes
-client.job_candidates(shortcode, stage_slug) # => Array of hashes (stage_slug is optional)
+client.job_candidates(shortcode, :stage => stage_slug, :limit => 100) # => Array of hashes:
+#   if given stage limits to given stage
+#   if given limit lists the last `limit` added candidates
 
 # Adding candidates - candidate is a Hash as described in:
 #   http://resources.workable.com/add-candidates-using-api

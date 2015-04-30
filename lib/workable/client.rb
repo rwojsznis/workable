@@ -48,11 +48,13 @@ module Workable
     end
 
     # list candidates for given job
-    # @param shortcode  [String]     job shortcode to select candidates from
-    # @param stage_slug [String|nil] optional stage slug, if not given candidates are listed for all stages
-    def job_candidates(shortcode, stage_slug = nil)
-      shortcode = "#{shortcode}/#{stage_slug}" unless stage_slug.nil?
-      transform_to(:candidate, get_request("jobs/#{shortcode}/candidates")['candidates'])
+    # @param  shortcode [String] job shortcode to select candidates from
+    # @param  options   [Hash]   extra options like `stage_slug` or `limit`
+    # @option options :stage [String]        optional stage slug, if not given candidates are listed for all stages
+    # @option options :limit [Number|String] optional limit of candidates to download, if not given all candidates are listed
+    def job_candidates(shortcode, options = {})
+      url = build_job_candidates_url(shortcode, options)
+      transform_to(:candidate, get_request(url)['candidates'])
     end
 
     # list of questions for job
@@ -158,6 +160,23 @@ module Workable
         'Content-Type'  => 'application/json',
         'User-Agent'    => 'Workable Ruby Client',
       }
+    end
+
+    # build url for fetching job candidates
+    # @param  shortcode [String] job shortcode to select candidates from
+    # @param  options   [Hash]   extra options like `stage_slug` or `limit`
+    # @option options :stage_slug [String]        optional stage slug, if not given candidates are listed for all stages
+    # @option options :limit      [Number|String] optional limit of candidates to download, if not given all candidates are listed
+    def build_job_candidates_url(shortcode, options)
+      if (stage_slug = options.delete(:stage))
+      then stage_slug = "/#{stage_slug}"
+      end
+      params =
+      if options.empty?
+      then ""
+      else "?#{options.map{|k,v| "#{k}=#{v}"}.join("&")}"
+      end
+      "jobs/#{shortcode}#{stage_slug}/candidates#{params}"
     end
 
     # transform result using given method if defined

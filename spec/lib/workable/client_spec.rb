@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Workable::Client do
 
-  describe 'initialization' do
+  describe '#new' do
     it 'raises an error on missing api_key / subdomain' do
       expect { described_class.new }.to raise_error(Workable::Errors::InvalidConfiguration)
       expect { described_class.new(api_key: 'key') }.to raise_error(Workable::Errors::InvalidConfiguration)
@@ -70,7 +70,31 @@ describe Workable::Client do
 
   end
 
-  describe '#candidates' do
+  describe "#build_job_candidates_url" do
+    subject{ described_class.new(api_key: 'test', subdomain: 'subdomain') }
+
+    it "builds url without options" do
+      expect(subject.send(:build_job_candidates_url, "test", {})).to eq("jobs/test/candidates")
+    end
+
+    it "builds url with multiple unknown options" do
+      expect(subject.send(:build_job_candidates_url, "test", {:a => 1, :b =>1})).to eq("jobs/test/candidates?a=1&b=1")
+    end
+
+    it "builds url with limit" do
+      expect(subject.send(:build_job_candidates_url, "test", {:limit => 100})).to eq("jobs/test/candidates?limit=100")
+    end
+
+    it "builds url with stage slug" do
+      expect(subject.send(:build_job_candidates_url, "test", {:stage => "sourced"})).to eq("jobs/test/sourced/candidates")
+    end
+
+    it "builds url with stage slug and limit" do
+      expect(subject.send(:build_job_candidates_url, "test", {:limit => 100, :stage => "sourced"})).to eq("jobs/test/sourced/candidates?limit=100")
+    end
+  end
+
+  describe '#job_candidates' do
     let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
 
     it 'returns array of candidates for given job' do
