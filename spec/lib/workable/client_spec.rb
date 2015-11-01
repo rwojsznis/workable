@@ -16,6 +16,59 @@ describe Workable::Client do
     end
   end
 
+  describe '#about' do
+    it 'returns information about company as a hash' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/')
+        .to_return(status: 200, body: about_json_fixture)
+      expect(client.about['name']).to eq('Groove Tech')
+    end
+  end
+
+  describe '#members' do
+    it 'returns array of members' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/members')
+        .to_return(status: 200, body: members_json_fixture)
+
+      expect(client.members).to be_kind_of(Array)
+      expect(client.members[0]).to eq(
+        'id' => '13e0eb0e',
+        'name' => 'Eduardo Vallente',
+        'headline' => 'Operations Manager',
+        'email' => 'eduardo.vallente@workabledemo.com',
+        'role' => 'admin'
+      )
+    end
+  end
+
+  describe '#recruiters' do
+    it 'returns array of recruiters' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/recruiters')
+        .to_return(status: 200, body: recruiters_json_fixture)
+
+      expect(client.recruiters).to be_kind_of(Array)
+      expect(client.recruiters[0]).to eq(
+        'id' => '19782abc',
+        'name' => 'Nadia Sawahla',
+        'email' => 'nadia.sawahla@name.com'
+      )
+    end
+  end
+
+  describe '#stages' do
+    it 'returns array of stages' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/stages')
+        .to_return(status: 200, body: stages_json_fixture)
+
+      expect(client.stages).to be_kind_of(Array)
+      expect(client.stages[0]).to eq(
+        'slug' => 'sourced',
+        'name' => 'Sourced',
+        'kind' => 'sourced',
+        'position' => 0
+      )
+    end
+  end
+
   describe '#jobs' do
     context 'happy path' do
       before do
@@ -105,51 +158,6 @@ describe Workable::Client do
         .to_return(status: 503, body: '{"error":"Not authorized"}')
 
       expect { client.job_candidates('03FF356C8B') }.to raise_error(Workable::Errors::RequestToLong)
-    end
-  end
-
-  describe '#stages' do
-    it 'returns array of stages' do
-      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/stages')
-        .to_return(status: 200, body: stages_json_fixture)
-
-      expect(client.stages).to be_kind_of(Array)
-      expect(client.stages[0]).to eq(
-        'slug' => 'sourced',
-        'name' => 'Sourced',
-        'kind' => 'sourced',
-        'position' => 0
-      )
-    end
-  end
-
-  describe '#recruiters' do
-    it 'returns array of recruiters' do
-      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/recruiters')
-        .to_return(status: 200, body: recruiters_json_fixture)
-
-      expect(client.recruiters).to be_kind_of(Array)
-      expect(client.recruiters[0]).to eq(
-        'id' => '19782abc',
-        'name' => 'Nadia Sawahla',
-        'email' => 'nadia.sawahla@name.com'
-      )
-    end
-  end
-
-  describe '#members' do
-    it 'returns array of members' do
-      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/members')
-        .to_return(status: 200, body: members_json_fixture)
-
-      expect(client.members).to be_kind_of(Array)
-      expect(client.members[0]).to eq(
-        'id' => '13e0eb0e',
-        'name' => 'Eduardo Vallente',
-        'headline' => 'Operations Manager',
-        'email' => 'eduardo.vallente@workabledemo.com',
-        'role' => 'admin'
-      )
     end
   end
 

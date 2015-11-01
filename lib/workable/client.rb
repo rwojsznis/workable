@@ -34,6 +34,26 @@ module Workable
       @transform_from = Transformation.new(options[:transform_from])
     end
 
+    # return information about your account
+    def about
+      get_request('')
+    end
+
+    # returns a collection of your account members
+    def members
+      @transform_to.apply(:member, get_request('members')['members'])
+    end
+
+    # returns a collection of your account external recruiters
+    def recruiters
+      @transform_to.apply(:recruiter, get_request('recruiters')['recruiters'])
+    end
+
+    # returns a collection of your recruitment pipeline stages
+    def stages
+      @transform_to.apply(:stage, get_request('stages')['stages'])
+    end
+
     # request posted jobs
     # @option params [Hash] optional filter parameters
     # @option params :stage [String] Returns jobs with the current state. Possible values (draft, published, archived & closed)
@@ -63,6 +83,9 @@ module Workable
       @transform_to.apply(:question, get_request("jobs/#{shortcode}/questions")['questions'])
     end
 
+    # TODO: /jobs/:shortcode/members
+    # TODO: /jobs/:shortcode/recruiters
+
     # list candidates for given job
     # @param  shortcode [String] job shortcode to select candidates from
     # @param  params [Hash]   extra options like `stage_slug` or `limit`
@@ -81,6 +104,8 @@ module Workable
         response['paging'])
     end
 
+    # TODO: /jobs/:shortcode/candidates/:id
+
     # create new candidate for given job
     # @param candidate  [Hash] the candidate data as described in
     #    https://workable.readme.io/docs/job-candidates-create
@@ -96,20 +121,6 @@ module Workable
       end
 
       @transform_to.apply(:candidate, response['candidate'])
-    end
-
-    # list of stages defined for company
-    def stages
-      @transform_to.apply(:stage, get_request('stages')['stages'])
-    end
-
-    # list of external recruiters for company
-    def recruiters
-      @transform_to.apply(:recruiter, get_request('recruiters')['recruiters'])
-    end
-
-    def members
-      @transform_to.apply(:member, get_request('members')['members'])
     end
 
     private

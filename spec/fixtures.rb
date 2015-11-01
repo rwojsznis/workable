@@ -1,6 +1,10 @@
 # coding: utf-8
 # JSONs stolen from official workable API docs
 
+def about_json_fixture
+  read_fixture 'about.json'
+end
+
 def jobs_index_json_fixture
   read_fixture 'jobs.json'
 end
