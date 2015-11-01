@@ -56,7 +56,7 @@ module Workable
 
     # request posted jobs
     # @option params [Hash] optional filter parameters
-    # @option params :stage [String] Returns jobs with the current state. Possible values (draft, published, archived & closed)
+    # @option params :state [String] Returns jobs with the current state. Possible values (draft, published, archived & closed)
     # @option params :limit [Integer] Specifies the number of jobs to try and retrieve per page
     # @option params :since_id [String] Returns results with an ID more than or equal to the specified ID.
     # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
@@ -97,8 +97,8 @@ module Workable
 
     # list candidates for given job
     # @param  shortcode [String] job shortcode to select candidates from
-    # @param  params [Hash]   extra options like `stage_slug` or `limit`
-    # @option params :stage [String]        optional stage slug, if not given candidates are listed for all stages
+    # @param  params [Hash]   extra options like `state` or `limit`
+    # @option params :state [String]        optional state slug, if not given candidates are listed for all stages
     # @option params :limit [Number|String] optional limit of candidates to download, if not given all candidates are listed
     # @option params :since_id [String] Returns results with an ID more than or equal to the specified ID.
     # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
