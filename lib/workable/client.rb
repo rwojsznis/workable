@@ -84,11 +84,13 @@ module Workable
     end
 
     # return a collection of job's members
+    # @param shortcode [String] job short code
     def job_members(shortcode)
       @transform_to.apply(:member, get_request("jobs/#{shortcode}/members")['members'])
     end
 
     # return a collection of the job's external recruiters
+    # @param shortcode [String] job short code
     def job_recruiters(shortcode)
       @transform_to.apply(:recruiter, get_request("jobs/#{shortcode}/recruiters")['recruiters'])
     end
@@ -112,7 +114,7 @@ module Workable
     end
 
     # return the full object of a specific candidate
-    # @param shortcode [String] job shortcode to select candidates from
+    # @param shortcode [String] job shortcode to select candidate from
     # @param id [String] candidates's id
     def job_candidate(shortcode, id)
       @transform_to.apply(:candidate, get_request("jobs/#{shortcode}/candidates/#{id}")['candidate'])

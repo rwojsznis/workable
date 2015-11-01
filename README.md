@@ -8,7 +8,7 @@
 
 Dead-simple Ruby API client for [workable.com][1]. No extra runtime dependencies. Ruby >= 1.9.3.
 
-Uses v2 API provided by workable.
+Uses v3 API provided by workable.
 
 ## Installation
 
@@ -28,18 +28,17 @@ Or install it yourself as:
 
 ## Usage
 
-Internal interface / api is in early stage, so far you can:
-- fetch jobs
-- fetch job details
-- fetch candidates for given job
+Gem covers all endpoints mentioned in official v3 workable API documentation (https://workable.readme.io/docs/).
 
 ### Example
+
+For detailed documentation please refer to: http://www.rubydoc.info/gems/workable
 
 ``` ruby
 client = Workable::Client.new(api_key: 'api_key', subdomain: 'your_subdomain')
 
 # takes optional phase argument (string): 'published' (default), 'draft', 'closed' or 'archived'
-client.jobs # => Array of hashes
+client.jobs # => Workable::Collection
 
 shortcode = client.jobs.first["shortcode"]
 
