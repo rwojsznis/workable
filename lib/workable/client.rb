@@ -6,7 +6,7 @@ module Workable
     # @option options :api_key   [String] api key for workable
     # @option options :subdomain [String] company subdomain in workable
     # @option options :transform_to [Hash<Symbol: Proc>] mapping of transformations for data
-    #    available transformations: [:job, :candidate, :question, :stage, :recruiter]
+    #    available transformations: [:job, :candidate, :question, :stage, :recruiter, :member]
     #    when no transformation is given raw Hash / Array data is returned
     #
     # @example transformation for candidates using `MyApp::Candidate.find_and_update_or_create`
@@ -101,6 +101,10 @@ module Workable
     # list of external recruiters for company
     def recruiters
       @transform_to.apply(:recruiter, get_request('recruiters')['recruiters'])
+    end
+
+    def members
+      @transform_to.apply(:member, get_request('members')['members'])
     end
 
     private

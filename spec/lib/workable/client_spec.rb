@@ -136,4 +136,20 @@ describe Workable::Client do
       )
     end
   end
+
+  describe '#members' do
+    it 'returns array of members' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/members')
+        .to_return(status: 200, body: members_json_fixture)
+
+      expect(client.members).to be_kind_of(Array)
+      expect(client.members[0]).to eq(
+        'id' => '13e0eb0e',
+        'name' => 'Eduardo Vallente',
+        'headline' => 'Operations Manager',
+        'email' => 'eduardo.vallente@workabledemo.com',
+        'role' => 'admin'
+      )
+    end
+  end
 end

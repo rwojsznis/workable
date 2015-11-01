@@ -1,0 +1,32 @@
+{
+  "members": [
+    {
+      "id": "13e0eb0e",
+      "name": "Eduardo Vallente",
+      "headline": "Operations Manager",
+      "email": "eduardo.vallente@workabledemo.com",
+      "role": "admin"
+    },
+    {
+      "id": "19782abc",
+      "name": "Nadia Sawahla",
+      "headline": "Talent Manager",
+      "email": "nadia.sawahla@name.com",
+      "role": "recruiter"
+    },
+    {
+      "id": "3247e8c7",
+      "name": "Alexia Middleton",
+      "headline": "Commercial Director",
+      "email": "alexia.middleton@workabledemo.com",
+      "role": "simple"
+    },
+    {
+      "id": "3c00c3ac",
+      "name": "David Bodello",
+      "headline": "IT Specialist Recruiter",
+      "email": "david.bodellos@gmail.com",
+      "role": "recruiter"
+    }
+  ]
+}

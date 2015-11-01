@@ -25,6 +25,10 @@ def recruiters_json_fixture
   read_fixture 'recruiters.json'
 end
 
+def members_json_fixture
+  read_fixture 'members.json'
+end
+
 def read_fixture(filename)
   File.read File.expand_path("../fixtures/#{filename}", __FILE__)
 end
