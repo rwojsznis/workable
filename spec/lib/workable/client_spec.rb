@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Workable::Client do
+  let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
+
   describe '#new' do
     it 'raises an error on missing api_key / subdomain' do
       expect { described_class.new }.to raise_error(Workable::Errors::InvalidConfiguration)
@@ -14,8 +16,6 @@ describe Workable::Client do
   end
 
   describe '#jobs' do
-    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
-
     context 'happy path' do
       before do
         stub_request(:get, "https://www.workable.com/spi/v3/accounts/subdomain/jobs")
@@ -59,8 +59,6 @@ describe Workable::Client do
   end
 
   describe '#job_details' do
-    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
-
     it 'returns details of given job' do
       stub_request(:get, "https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B")
         .to_return(status: 200, body: job_json_fixture, headers: {})
@@ -87,7 +85,6 @@ describe Workable::Client do
       expect(questions).to be_kind_of(Array)
       expect(questions[0]["body"]).to eq("Explain one aspect of this role you believe you will excel at.")
     end
-
   end
 
   describe '#job_candidates' do
@@ -108,17 +105,25 @@ describe Workable::Client do
 
       expect { client.job_candidates('03FF356C8B') }.to raise_error(Workable::Errors::RequestToLong)
     end
-
   end
 
   describe '#stages' do
-    let(:client){ described_class.new(api_key: 'test', subdomain: 'subdomain') }
-
     it 'returns array of stages' do
       stub_request(:get, "https://www.workable.com/spi/v3/accounts/subdomain/stages")
         .to_return(status: 200, body: stages_json_fixture, headers: {})
 
       expect(client.stages).to be_kind_of(Array)
+      expect(client.stages[0]).to eq("slug" => "sourced", "name" => "Sourced", "kind" => "sourced", "position" => 0)
+    end
+  end
+
+  describe '#recruiters' do
+    it 'returns array of recruiters' do
+      stub_request(:get, "https://www.workable.com/spi/v3/accounts/subdomain/recruiters")
+        .to_return(status: 200, body: recruiters_json_fixture, headers: {})
+
+      expect(client.recruiters).to be_kind_of(Array)
+      expect(client.recruiters[0]).to eq("id"=>"19782abc", "name"=>"Nadia Sawahla", "email"=>"nadia.sawahla@name.com")
     end
   end
 end
