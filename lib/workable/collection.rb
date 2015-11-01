@@ -1,7 +1,7 @@
 module Workable
   class Collection
     extend Forwardable
-    def_delegator :@data, :size
+    def_delegators :@data, :size, :each, :[], :map, :first
 
     attr_reader :data
 
