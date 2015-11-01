@@ -83,14 +83,19 @@ module Workable
 
     # create new candidate for given job
     # @param candidate  [Hash] the candidate data as described in
-    #    http://resources.workable.com/add-candidates-using-api
+    #    https://workable.readme.io/docs/job-candidates-create
     #    including the `{"candidate"=>{}}` part
     # @param shortcode  [String] job short code
     # @param stage_slug [String] optional stage slug
     # @return [Hash] the candidate information without `{"candidate"=>{}}` part
     def create_job_candidate(candidate, shortcode, stage_slug = nil)
-      shortcode = "#{shortcode}/#{stage_slug}" unless stage_slug.nil?
-      transform_to(:candidate, post_request("jobs/#{shortcode}/candidates", candidate)['candidate'])
+      shortcode = "#{shortcode}/#{stage_slug}" if stage_slug
+
+      response = post_request("jobs/#{shortcode}/candidates", candidate) do |request|
+        request.body = @transform_from.apply(:candidate, candidate).to_json
+      end
+
+      @transform_to.apply(:candidate, response['candidate'])
     end
 
     # list of stages defined for company
@@ -126,7 +131,7 @@ module Workable
     # do the post request to api
     def post_request(url, data)
       do_request(url, Net::HTTP::Post) do |request|
-        request.body = transform_from(:candidate, data).to_json
+        yield(request) if block_given?
       end
     end
 

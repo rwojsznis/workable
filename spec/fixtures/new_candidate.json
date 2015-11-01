@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "name": "Jj Botha",
+    "firstname": "Jj",
+    "lastname": "Botha",
+    "headline": "Professional Administration Manager",
+    "summary": "A focussed, results-driven team player with many year experience in the field. Working my way up to management level, I have experience of every aspect of this role. I understand the challenges it brings, and have a proven track record of providing solutions.",
+    "address": "25772 Gustave Shore, Iowa, USA",
+    "phone": "1-859-557-6573",
+    "email": "jj_botha@fakemail.com",
+    "cover_letter": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+
+    "education_entries": [
+      { "degree": "MBA", "school": "University of Pennsylvania", "field_of_study": null, "start_date": "2008-03-01", "end_date": "2011-03-30" },
+      { "degree": "B.S.", "school": "University of Chicago", "field_of_study": "Marketing Communication & Economics", "start_date": "2004-09-01", "end_date": "2007-03-30" }
+    ],
+
+    "experience_entries": [
+      {
+        "title": "Sales Director",
+        "summary": null,
+        "start_date": "2011-03-01",
+        "end_date": "2014-03-30",
+        "current": false,
+        "company": "Vox Mobile",
+        "industry": "Telecommunications"
+      }
+    ],
+
+    "answers": [
+      {
+        "question_key": "2128d717",
+        "body": "Planning"
+      },
+      {
+        "question_key": "3399e6cd",
+        "choices": ["1e477229"]
+      }
+    ],
+
+    "skills": [ "Travel Planning", "Problem Solving"],
+    "social_profiles": [
+        {
+          "type": "twitter",
+          "name": "Twitter",
+          "username": "jj_botha",
+          "url": "http://www.twitter.com/jj_botha"
+        },
+        {
+          "type": "linkedin",
+          "name": "LinkedIn",
+          "url": "http://www.linkedin.com/in/jj_botha"
+        },
+        {
+          "type": "googleplus",
+          "url": "https://plus.google.com/6908286706342698"
+        }
+    ]
+  }
+}
