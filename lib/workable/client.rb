@@ -1,6 +1,5 @@
 module Workable
   class Client
-
     # set access to workable and data transformation methods
     #
     # @param options [Hash]
@@ -29,8 +28,8 @@ module Workable
     #      }
     #    )
     def initialize(options = {})
-      @api_key   = options.fetch(:api_key)   { fail Errors::InvalidConfiguration, "Missing api_key argument"   }
-      @subdomain = options.fetch(:subdomain) { fail Errors::InvalidConfiguration, "Missing subdomain argument" }
+      @api_key   = options.fetch(:api_key)   { fail Errors::InvalidConfiguration, 'Missing api_key argument'   }
+      @subdomain = options.fetch(:subdomain) { fail Errors::InvalidConfiguration, 'Missing subdomain argument' }
       @transform_to   = Transformation.new(options[:transform_to])
       @transform_from = Transformation.new(options[:transform_from])
     end
@@ -44,7 +43,7 @@ module Workable
     # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
     # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
     def jobs(params = {})
-      response = get_request("jobs", params)
+      response = get_request('jobs', params)
 
       build_collection(
         @transform_to.apply(:job, response['jobs']),
@@ -61,7 +60,7 @@ module Workable
     # list of questions for job
     # @param shortcode [String] job short code
     def job_questions(shortcode)
-       @transform_to.apply(:question, get_request("jobs/#{shortcode}/questions")['questions'])
+      @transform_to.apply(:question, get_request("jobs/#{shortcode}/questions")['questions'])
     end
 
     # list candidates for given job
@@ -82,7 +81,6 @@ module Workable
         response['paging'])
     end
 
-
     # create new candidate for given job
     # @param candidate  [Hash] the candidate data as described in
     #    http://resources.workable.com/add-candidates-using-api
@@ -92,17 +90,17 @@ module Workable
     # @return [Hash] the candidate information without `{"candidate"=>{}}` part
     def create_job_candidate(candidate, shortcode, stage_slug = nil)
       shortcode = "#{shortcode}/#{stage_slug}" unless stage_slug.nil?
-      transform_to(:candidate, post_request("jobs/#{shortcode}/candidates", candidate)["candidate"])
+      transform_to(:candidate, post_request("jobs/#{shortcode}/candidates", candidate)['candidate'])
     end
 
     # list of stages defined for company
     def stages
-      @transform_to.apply(:stage, get_request("stages")['stages'])
+      @transform_to.apply(:stage, get_request('stages')['stages'])
     end
 
     # list of external recruiters for company
     def recruiters
-      @transform_to.apply(:recruiter, get_request("recruiters")['recruiters'])
+      @transform_to.apply(:recruiter, get_request('recruiters')['recruiters'])
     end
 
     private
@@ -111,12 +109,12 @@ module Workable
 
     # build the url to api
     def api_url
-      "https://www.workable.com/spi/v%s/accounts/%s" % [Workable::API_VERSION, subdomain]
+      'https://www.workable.com/spi/v%s/accounts/%s' % [Workable::API_VERSION, subdomain]
     end
 
     # do the get request to api
     def get_request(url, params = {})
-      params = URI.encode_www_form(params.keep_if { |k,v| k && v })
+      params = URI.encode_www_form(params.keep_if { |k, v| k && v })
       full_url = [url, params].compact.join('?')
       do_request(full_url, Net::HTTP::Get)
     end
@@ -129,12 +127,12 @@ module Workable
     end
 
     # generic part of requesting api
-    def do_request(url, type, &block)
+    def do_request(url, type, &_block)
       uri = URI.parse("#{api_url}/#{url}")
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
 
-      request  = type.new(uri.request_uri, headers)
+      request = type.new(uri.request_uri, headers)
       yield request if block_given?
       response = http.request(request)
 
@@ -149,28 +147,26 @@ module Workable
       when 200...300 # handled with response
         JSON.parse(response.body)
       when 401
-        raise Errors::NotAuthorized, JSON.parse(response.body)["error"]
+        fail Errors::NotAuthorized, JSON.parse(response.body)['error']
       when 404
-        raise Errors::NotFound, JSON.parse(response.body)["error"]
+        fail Errors::NotFound, JSON.parse(response.body)['error']
       when 422
         handle_response_422(response)
       when 503
-        raise Errors::RequestToLong, response.body
+        fail Errors::RequestToLong, response.body
       else
-        raise Errors::InvalidResponse, "Response code: #{response.code} message: #{response.body}"
+        fail Errors::InvalidResponse, "Response code: #{response.code} message: #{response.body}"
       end
     end
 
     def handle_response_422(response)
       data = JSON.parse(response.body)
-      if
-        data["validation_errors"] &&
-        data["validation_errors"]["email"] &&
-        data["validation_errors"]["email"].include?("candidate already exists")
-      then
-        raise Errors::AlreadyExists, data["error"]
+      if data['validation_errors'] &&
+         data['validation_errors']['email'] &&
+         data['validation_errors']['email'].include?('candidate already exists')
+        fail Errors::AlreadyExists, data['error']
       else
-        raise Errors::NotFound, data["error"]
+        fail Errors::NotFound, data['error']
       end
     end
 
@@ -180,7 +176,7 @@ module Workable
         'Accept'        => 'application/json',
         'Authorization' => "Bearer #{api_key}",
         'Content-Type'  => 'application/json',
-        'User-Agent'    => 'Workable Ruby Client',
+        'User-Agent'    => 'Workable Ruby Client'
       }
     end
 

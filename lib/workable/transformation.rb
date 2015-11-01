@@ -1,6 +1,5 @@
 module Workable
   class Transformation
-
     def initialize(mappings)
       @mappings = mappings || {}
     end
