@@ -9,5 +9,5 @@ require_relative "workable/errors"
 require_relative "workable/client"
 
 module Workable
-  API_VERSION = "2".freeze
+  API_VERSION = 3
 end
