@@ -141,6 +141,36 @@ describe Workable::Client do
     end
   end
 
+  describe '#job_members' do
+    it "returns array of job's members" do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/job_slug/members')
+        .to_return(status: 200, body: members_json_fixture)
+
+      expect(client.job_members('job_slug')).to be_kind_of(Array)
+      expect(client.job_members('job_slug')[0]).to eq(
+        'id' => '13e0eb0e',
+        'name' => 'Eduardo Vallente',
+        'headline' => 'Operations Manager',
+        'email' => 'eduardo.vallente@workabledemo.com',
+        'role' => 'admin'
+      )
+    end
+  end
+
+  describe 'job_recruiters' do
+    it "returns array of job's recruiters" do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/job_slug/recruiters')
+        .to_return(status: 200, body: recruiters_json_fixture)
+
+      expect(client.job_recruiters('job_slug')).to be_kind_of(Array)
+      expect(client.job_recruiters('job_slug')[0]).to eq(
+        'id' => '19782abc',
+        'name' => 'Nadia Sawahla',
+        'email' => 'nadia.sawahla@name.com'
+      )
+    end
+  end
+
   describe '#job_candidates' do
     let(:client) { described_class.new(api_key: 'test', subdomain: 'subdomain') }
 
@@ -158,6 +188,15 @@ describe Workable::Client do
         .to_return(status: 503, body: '{"error":"Not authorized"}')
 
       expect { client.job_candidates('03FF356C8B') }.to raise_error(Workable::Errors::RequestToLong)
+    end
+  end
+
+  describe '#job_candidate' do
+    it 'returns detailed info about given candidate' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/job-slug/candidates/some-id')
+        .to_return(status: 200, body: job_candidate_json_fixture)
+
+      expect(client.job_candidate('job-slug', 'some-id')['name']).to eq('Cindy Sawyers')
     end
   end
 

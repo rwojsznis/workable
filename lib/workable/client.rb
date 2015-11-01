@@ -83,8 +83,15 @@ module Workable
       @transform_to.apply(:question, get_request("jobs/#{shortcode}/questions")['questions'])
     end
 
-    # TODO: /jobs/:shortcode/members
-    # TODO: /jobs/:shortcode/recruiters
+    # return a collection of job's members
+    def job_members(shortcode)
+      @transform_to.apply(:member, get_request("jobs/#{shortcode}/members")['members'])
+    end
+
+    # return a collection of the job's external recruiters
+    def job_recruiters(shortcode)
+      @transform_to.apply(:recruiter, get_request("jobs/#{shortcode}/recruiters")['recruiters'])
+    end
 
     # list candidates for given job
     # @param  shortcode [String] job shortcode to select candidates from
@@ -104,7 +111,12 @@ module Workable
         response['paging'])
     end
 
-    # TODO: /jobs/:shortcode/candidates/:id
+    # return the full object of a specific candidate
+    # @param shortcode [String] job shortcode to select candidates from
+    # @param id [String] candidates's id
+    def job_candidate(shortcode, id)
+      @transform_to.apply(:candidate, get_request("jobs/#{shortcode}/candidates/#{id}")['candidate'])
+    end
 
     # create new candidate for given job
     # @param candidate  [Hash] the candidate data as described in
