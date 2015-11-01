@@ -1,0 +1,34 @@
+{
+  "questions": [
+    {
+      "id": "2128d717",
+      "body": "Explain one aspect of this role you believe you will excel at.",
+      "type": "free_text"
+    },
+    {
+      "id": "3399e6cd",
+      "body": "How many years administrative experience do you have?",
+      "type": "multiple_choice",
+      "single_answer": true,
+      "choices": [
+        {
+          "id": "3049114a",
+          "body": "0-3 years"
+        },
+        {
+          "id": "29406296",
+          "body": "3-5 years"
+        },
+        {
+          "id": "1e477229",
+          "body": "Over 5 years"
+        }
+      ]
+    },
+    {
+      "id": "1d3f348f",
+      "body": "Intermediate or above proficiency with MS Office?",
+      "type": "boolean"
+    }
+  ]
+}

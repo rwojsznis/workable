@@ -31,37 +31,57 @@ module Workable
     def initialize(options = {})
       @api_key   = options.fetch(:api_key)   { fail Errors::InvalidConfiguration, "Missing api_key argument"   }
       @subdomain = options.fetch(:subdomain) { fail Errors::InvalidConfiguration, "Missing subdomain argument" }
-      @transform_to   = options[:transform_to]   || {}
-      @transform_from = options[:transform_from] || {}
+      @transform_to   = Transformation.new(options[:transform_to])
+      @transform_from = Transformation.new(options[:transform_from])
     end
 
-    # request jobs of given type
-    # @param type [String] type of jobs to fetch, `published` by default
-    def jobs(type = 'published')
-      transform_to(:job, get_request("jobs?phase=#{type}")['jobs'])
+    # request posted jobs
+    # @option params [Hash] optional filter parameters
+    # @option params :stage [String] Returns jobs with the current state. Possible values (draft, published, archived & closed)
+    # @option params :limit [Integer] Specifies the number of jobs to try and retrieve per page
+    # @option params :since_id [String] Returns results with an ID more than or equal to the specified ID.
+    # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
+    # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
+    # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
+    def jobs(params = {})
+      response = get_request("jobs", params)
+
+      build_collection(
+        @transform_to.apply(:job, response['jobs']),
+        __callee__,
+        response['paging'])
     end
 
     # request detailed information about job
     # @param shortcode [String] job short code
     def job_details(shortcode)
-      transform_to(:job, get_request("jobs/#{shortcode}"))
-    end
-
-    # list candidates for given job
-    # @param  shortcode [String] job shortcode to select candidates from
-    # @param  options   [Hash]   extra options like `stage_slug` or `limit`
-    # @option options :stage [String]        optional stage slug, if not given candidates are listed for all stages
-    # @option options :limit [Number|String] optional limit of candidates to download, if not given all candidates are listed
-    def job_candidates(shortcode, options = {})
-      url = build_job_candidates_url(shortcode, options)
-      transform_to(:candidate, get_request(url)['candidates'])
+      @transform_to.apply(:job, get_request("jobs/#{shortcode}"))
     end
 
     # list of questions for job
     # @param shortcode [String] job short code
     def job_questions(shortcode)
-      transform_to(:question, get_request("jobs/#{shortcode}/questions")['questions'])
+       @transform_to.apply(:question, get_request("jobs/#{shortcode}/questions")['questions'])
     end
+
+    # list candidates for given job
+    # @param  shortcode [String] job shortcode to select candidates from
+    # @param  params [Hash]   extra options like `stage_slug` or `limit`
+    # @option params :stage [String]        optional stage slug, if not given candidates are listed for all stages
+    # @option params :limit [Number|String] optional limit of candidates to download, if not given all candidates are listed
+    # @option params :since_id [String] Returns results with an ID more than or equal to the specified ID.
+    # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
+    # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
+    # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
+    def job_candidates(shortcode, params = {})
+      response = get_request("jobs/#{shortcode}/candidates", params)
+
+      build_collection(
+        @transform_to.apply(:candidate, response['candidates']),
+        __callee__,
+        response['paging'])
+    end
+
 
     # create new candidate for given job
     # @param candidate  [Hash] the candidate data as described in
@@ -77,7 +97,7 @@ module Workable
 
     # list of stages defined for company
     def stages
-      transform_to(:stage, get_request("stages")['stages'])
+      @transform_to.apply(:stage, get_request("stages")['stages'])
     end
 
     # list of external recruiters for company
@@ -95,8 +115,10 @@ module Workable
     end
 
     # do the get request to api
-    def get_request(url)
-      do_request(url, Net::HTTP::Get)
+    def get_request(url, params = {})
+      params = URI.encode_www_form(params.keep_if { |k,v| k && v })
+      full_url = [url, params].compact.join('?')
+      do_request(full_url, Net::HTTP::Get)
     end
 
     # do the post request to api
@@ -162,31 +184,6 @@ module Workable
       }
     end
 
-    # build url for fetching job candidates
-    # @param  shortcode [String] job shortcode to select candidates from
-    # @param  options   [Hash]   extra options like `stage_slug` or `limit`
-    # @option options :stage_slug [String]        optional stage slug, if not given candidates are listed for all stages
-    # @option options :limit      [Number|String] optional limit of candidates to download, if not given all candidates are listed
-    def build_job_candidates_url(shortcode, options)
-      if (stage_slug = options.delete(:stage))
-      then stage_slug = "/#{stage_slug}"
-      end
-      params =
-      if options.empty?
-      then ""
-      else "?#{options.map{|k,v| "#{k}=#{v}"}.join("&")}"
-      end
-      "jobs/#{shortcode}#{stage_slug}/candidates#{params}"
-    end
-
-    # transform result using given method if defined
-    # @param type [Symbol] type of the transformation, one of `[:job, :candidate, :question, :stage]`
-    # @param result [Hash|Array|nil] the value to transform, can be nothing, `Hash` of values or `Array` of `Hash`es
-    # @return transformed result if transformation exists for type, raw result otherwise
-    def transform_to(type, result)
-      transform(@transform_to[type], result)
-    end
-
     # transform input using given method if defined
     # @param type [Symbol] type of the transformation, only `[:candidate]` supported so far
     # @param result [Hash|Array|nil] the value to transform, can be nothing, `Hash` of values or `Array` of `Hash`es
@@ -195,22 +192,11 @@ module Workable
       transform(@transform_from[type], input)
     end
 
-    # selects transformation strategy based on the inputs
-    # @param transformation [Method|Proc|nil] the transformation to perform
-    # @param data           [Hash|Array|nil]  the data to transform
-    # @return               [Object|nil]
-    #    results of the transformation if given, raw data otherwise
-    def transform(transformation, data)
-      return data unless transformation
-      case data
-      when nil
-        data
-      when Array
-        data.map{|datas| transformation.call(datas) }
-      else
-        transformation.call(data)
-      end
+    def build_collection(data, method_name, paging = nil)
+      Collection.new(
+        data,
+        method(method_name),
+        paging)
     end
-
   end
 end

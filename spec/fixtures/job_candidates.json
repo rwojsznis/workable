@@ -1,0 +1,55 @@
+
+
+{
+  "candidates": [
+    {
+      "id": "ce4da98",
+      "name": "Lakita Marrero",
+      "firstname": "Lakita",
+      "lastname": "Marrero",
+      "headline": "Operations Manager",
+      "account": {
+        "subdomain": "groove-tech",
+        "name": "Groove Tech"
+      },
+      "job": {
+        "shortcode": "GROOV005",
+        "title": "Office Manager"
+      },
+      "stage": "Interview",
+      "disqualified": true,
+      "disqualification_reason": null,
+      "sourced": false,
+      "profile_url": "https://groove-tech.workable.com/backend/jobs/376844767/candidates/216323526",
+      "email": "lakita_marrero@gmail.com",
+      "domain": "twitter.com",
+      "created_at": "2015-06-26T00:00:00Z",
+      "updated_at": "2015-07-08T14:46:48Z"
+    },
+    {
+      "id": "108d1748",
+      "name": "Cindy Sawyers",
+      "firstname": "Cindy",
+      "lastname": "Sawyers",
+      "headline": "Talented Operations Executive",
+      "account": {
+        "subdomain": "groove-tech",
+        "name": "Groove Tech"
+      },
+      "job": {
+        "shortcode": "GROOV005",
+        "title": "Office Manager"
+      },
+      "stage": "Applied",
+      "disqualified": false,
+      "disqualification_reason": null,
+      "sourced": false,
+      "profile_url": "https://groove-tech.workable.com/backend/jobs/376844767/candidates/277680758",
+      "email": "cindy_sawyers@gmail.com",
+      "domain": "indeed.com",
+      "created_at": "2015-07-08T00:00:00Z",
+      "updated_at": "2015-07-08T14:46:48Z"
+    }
+  ]
+}
+

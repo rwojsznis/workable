@@ -1,0 +1,40 @@
+{
+  "stages": [
+    {
+      "slug": "sourced",
+      "name": "Sourced",
+      "kind": "sourced",
+      "position": 0
+    },
+    {
+      "slug": "applied",
+      "name": "Applied",
+      "kind": "applied",
+      "position": 1
+    },
+    {
+      "slug": "phone-screen",
+      "name": "Phone Screen",
+      "kind": "phone-screen",
+      "position": 2
+    },
+    {
+      "slug": "interview",
+      "name": "Interview",
+      "kind": "interview",
+      "position": 3
+    },
+    {
+      "slug": "offer",
+      "name": "Offer",
+      "kind": "offer",
+      "position": 4
+    },
+    {
+      "slug": "hired",
+      "name": "Hired",
+      "kind": "hired",
+      "position": 5
+    }
+  ]
+}
