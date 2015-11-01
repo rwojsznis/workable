@@ -28,8 +28,8 @@ module Workable
     #      }
     #    )
     def initialize(options = {})
-      @api_key   = options.fetch(:api_key)   { fail Errors::InvalidConfiguration, 'Missing api_key argument'   }
-      @subdomain = options.fetch(:subdomain) { fail Errors::InvalidConfiguration, 'Missing subdomain argument' }
+      @api_key   = options.fetch(:api_key)   { configuration_error 'Missing api_key argument'   }
+      @subdomain = options.fetch(:subdomain) { configuration_error 'Missing subdomain argument' }
       @transform_to   = Transformation.new(options[:transform_to])
       @transform_from = Transformation.new(options[:transform_from])
     end
@@ -193,6 +193,10 @@ module Workable
         data,
         method(method_name),
         paging)
+    end
+
+    def configuration_error(message)
+      fail Errors::InvalidConfiguration, message
     end
   end
 end
