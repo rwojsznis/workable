@@ -128,7 +128,7 @@ module Workable
     def create_job_candidate(candidate, shortcode, stage_slug = nil)
       shortcode = "#{shortcode}/#{stage_slug}" if stage_slug
 
-      response = post_request("jobs/#{shortcode}/candidates", candidate) do |request|
+      response = post_request("jobs/#{shortcode}/candidates") do |request|
         request.body = @transform_from.apply(:candidate, candidate).to_json
       end
 
@@ -152,7 +152,7 @@ module Workable
     end
 
     # do the post request to api
-    def post_request(url, data)
+    def post_request(url)
       do_request(url, Net::HTTP::Post) do |request|
         yield(request) if block_given?
       end
