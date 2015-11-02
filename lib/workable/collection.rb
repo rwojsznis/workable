@@ -17,7 +17,7 @@ module Workable
     end
 
     def next_page?
-      @next_page
+      !! @next_page
     end
 
     def fetch_next_page
