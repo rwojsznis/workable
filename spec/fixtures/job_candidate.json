@@ -1,0 +1,119 @@
+{
+  "candidate": {
+    "id": "108d1748",
+    "name": "Cindy Sawyers",
+    "firstname": "Cindy",
+    "lastname": "Sawyers",
+    "headline": "Operations Manager",
+    "image_url": null,
+    "account": {
+      "subdomain": "groove-tech",
+      "name": "Groove Tech"
+    },
+    "job": {
+      "shortcode": "GROOV005",
+      "title": "Office Manager"
+    },
+    "stage": "Applied",
+    "disqualified": false,
+    "disqualified_at": null,
+    "disqualification_reason": null,
+    "sourced": false,
+    "profile_url": "https://groove-tech.workable.com/backend/jobs/376844767/candidates/277680758",
+    "address": "332 Clemmie Roads, Colorado, USA",
+    "phone": "(785)991-6256",
+    "email": "cindy_sawyers@gmail.com",
+    "outbound_mailbox": "azjp_gws@outbound.workable.mailgun.org",
+    "domain": "twitter.com",
+    "uploader_id": null,
+    "created_at": "2015-07-01T00:00:00Z",
+    "updated_at": "2015-07-06T12:16:51Z",
+    "cover_letter": null,
+    "summary": "A focussed, results-driven team player with many year experience in the field. Working my way up to management level, I have experience of every aspect of this role. I understand the challenges it brings, and have a proven track record of providing solutions.",
+    "education_entries": [
+      {
+        "degree": "B.A. Business Studies",
+        "school": "University of Chicago",
+        "field_of_study": null,
+        "start_date": "2001-01-01",
+        "end_date": "2005-01-01"
+      },
+      {
+        "degree": "Diploma",
+        "school": "Juliet Hargreaves High School",
+        "field_of_study": null,
+        "start_date": "1997-01-01",
+        "end_date": "2001-01-01"
+      }
+    ],
+    "experience_entries": [
+      {
+        "title": "Executive Assistant",
+        "summary": "<ul><li>Dealt with contacts and correspondence.</li><li>Managed suppliers, contractors and office systems.</li><li>Maintained handbooks, policies and practices, ensuring they were understood and adhered to by all staff.</li><li>Coordinated and project managed the office relocation and renovation.</li></ul>",
+        "start_date": "2013-01-01",
+        "end_date": null,
+        "company": "Overflow Furnishings",
+        "industry": null,
+        "current": true
+      },
+      {
+        "title": "Resources Manager",
+        "summary": "<ul><li>Coordinated agendas and papers, minute taking and maintaining records for the management committee.</li><li>Managed vendor/supplier relationships.</li><li>Responsible for overall management of the office, including budgets and building and facilities management.</li><li>Ensured compliance with health and safety and other workplace legislation, including regular risk assessments.</li></ul>",
+        "start_date": "2009-01-01",
+        "end_date": "2013-01-01",
+        "company": "Kidlaw Supplies",
+        "industry": null,
+        "current": false
+      },
+      {
+        "title": "Administrative Officer",
+        "summary": "<ul><li>Managed the implementation and development of an effective recruitment program.</li><li>Organised Fire and First Aid training.</li><li>Developed induction and handover processes for staff, interns, trustees and volunteers.</li><li>Planned and managed the CEO\\\\’s diary of internal and external meetings.</li></ul>",
+        "start_date": "2005-01-01",
+        "end_date": "2009-01-01",
+        "company": "Spakes IT Services",
+        "industry": null,
+        "current": false
+      }
+    ],
+    "skills": [
+      {
+        "name": "Administration"
+      },
+      {
+        "name": "Organization"
+      },
+      {
+        "name": "Budgeting"
+      },
+      {
+        "name": "Project Management"
+      },
+      {
+        "name": "MS Office"
+      },
+      {
+        "name": "Event Management"
+      }
+    ],
+    "answers": [],
+    "resume_url": null,
+    "social_profiles": [
+      {
+        "type": "twitter",
+        "name": "Twitter",
+        "username": "cindy_sawyers",
+        "url": "http://www.twitter.com/cindy_sawyers"
+      },
+      {
+        "type": "linkedin",
+        "name": "LinkedIn",
+        "url": "http://www.linkedin.com/in/cindy_sawyers"
+      },
+      {
+        "type": "googleplus",
+        "url": "https://plus.google.com/1849771376195546"
+      }
+    ],
+    "tags": []
+  }
+}
