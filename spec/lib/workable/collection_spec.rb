@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Workable::Collection do
   describe 'delegation' do
-    let(:collection){ described_class.new([1, 2, 3], double) }
+    let(:collection){ described_class.new([1, 2, 3], double, :job, 'jobs') }
 
     it 'delegates size to `data`' do
       expect(collection.size).to eq(3)
@@ -27,13 +27,13 @@ describe Workable::Collection do
 
   describe '#fetch_next_page' do
     let(:next_method){ double }
-    let(:collection){ described_class.new([], next_method, paging) }
+    let(:collection){ described_class.new([], next_method, :job, 'jobs', paging) }
 
     context 'when next page is available' do
       let(:paging){ { 'next' => 'http://example.com?limit=2&since_id=3' } }
 
-      it 'executes next_method with next page url params' do
-        expect(next_method).to receive(:call).with('limit' => ['2'], 'since_id' => ['3'])
+      it 'executes next_method with next page url' do
+        expect(next_method).to receive(:call).with('http://example.com?limit=2&since_id=3', :job, 'jobs')
         collection.fetch_next_page
       end
     end

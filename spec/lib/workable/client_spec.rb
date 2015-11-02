@@ -129,8 +129,6 @@ describe Workable::Client do
   end
 
   describe '#job_questions' do
-    let(:client) { described_class.new(api_key: 'test', subdomain: 'subdomain') }
-
     it 'returns questions for given job' do
       stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/questions')
         .to_return(status: 200, body: job_questions_json_fixture)
@@ -172,22 +170,36 @@ describe Workable::Client do
   end
 
   describe '#job_candidates' do
-    let(:client) { described_class.new(api_key: 'test', subdomain: 'subdomain') }
+    context 'happy path' do
+      let(:candidates){ client.job_candidates('03FF356C8B') }
+    before do
+        stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/candidates')
+          .to_return(status: 200, body: job_candidates_json_fixture)
+      end
 
-    it 'returns collection of candidates for given job' do
-      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/candidates')
-        .to_return(status: 200, body: job_candidates_json_fixture)
+      it 'returns collection of candidates for given job' do
+        expect(candidates).to be_kind_of(Workable::Collection)
+        expect(candidates.data[0]['name']).to eq('Lakita Marrero')
+      end
 
-      candidates = client.job_candidates('03FF356C8B')
-      expect(candidates).to be_kind_of(Workable::Collection)
-      expect(candidates.data[0]['name']).to eq('Lakita Marrero')
+      it 'includes next page method that returns next collection' do
+        stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/subdomain/candidates?limit=3&since_id=2700d6df')
+          .with(headers: headers)
+          .to_return(status: 200, body: job_candidates_json_fixture)
+
+        next_candidates = candidates.fetch_next_page
+        expect(next_candidates).to be_kind_of(Workable::Collection)
+        expect(next_candidates.data).to be_kind_of(Array)
+      end
     end
 
-    it 'raises exception on to long requests' do
-      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/candidates')
-        .to_return(status: 503, body: '{"error":"Not authorized"}')
+    context 'sad path' do
+      it 'raises exception on to long requests' do
+        stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/candidates')
+          .to_return(status: 503, body: '{"error":"Not authorized"}')
 
-      expect { client.job_candidates('03FF356C8B') }.to raise_error(Workable::Errors::RequestToLong)
+        expect { client.job_candidates('03FF356C8B') }.to raise_error(Workable::Errors::RequestToLong)
+      end
     end
   end
 

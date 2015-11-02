@@ -63,12 +63,7 @@ module Workable
     # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
     # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
     def jobs(params = {})
-      response = get_request('jobs', params)
-
-      build_collection(
-        @transform_to.apply(:job, response['jobs']),
-        __callee__,
-        response['paging'])
+      build_collection('jobs', :job, 'jobs', params)
     end
 
     # request detailed information about job
@@ -105,12 +100,7 @@ module Workable
     # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
     # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
     def job_candidates(shortcode, params = {})
-      response = get_request("jobs/#{shortcode}/candidates", params)
-
-      build_collection(
-        @transform_to.apply(:candidate, response['candidates']),
-        __callee__,
-        response['paging'])
+      build_collection("jobs/#{shortcode}/candidates", :candidate, 'candidates', params)
     end
 
     # return the full object of a specific candidate
@@ -149,7 +139,7 @@ module Workable
     # do the get request to api
     def get_request(url, params = {})
       params = URI.encode_www_form(params.keep_if { |k, v| k && v })
-      full_url = [url, params].compact.join('?')
+      full_url = params.empty? ? url : [url, params].join('?')
       do_request(full_url, Net::HTTP::Get)
     end
 
@@ -222,11 +212,16 @@ module Workable
       transform(@transform_from[type], input)
     end
 
-    def build_collection(data, method_name, paging = nil)
+    def build_collection(url, transform_mapping, root_key, params = {})
+      url = url.gsub(/#{api_url}\/?/, '')
+      response = get_request(url, params)
+
       Collection.new(
-        data,
-        method(method_name),
-        paging)
+        @transform_to.apply(transform_mapping, response[root_key]),
+        method(__callee__),
+        transform_mapping,
+        root_key,
+        response['paging'])
     end
 
     def configuration_error(message)

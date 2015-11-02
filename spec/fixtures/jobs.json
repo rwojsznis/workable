@@ -68,6 +68,6 @@
     }
   ],
   "paging": {
-    "next": "https://www.workable.com/spi/v3/accounts/groove-tech/jobs?limit=3&since_id=2700d6df"
+    "next": "https://www.workable.com/spi/v3/accounts/subdomain/jobs?limit=3&since_id=2700d6df"
   }
 }

@@ -5,12 +5,14 @@ module Workable
 
     attr_reader :data
 
-    def initialize(data, next_page_method, paging = nil)
+    def initialize(data, next_page_method, transform_mapping, root_key, paging = nil)
       @data = data
 
       if paging
         @next_page = paging['next']
         @next_page_method = next_page_method
+        @transform_mapping = transform_mapping
+        @root_key = root_key
       end
     end
 
@@ -21,8 +23,7 @@ module Workable
     def fetch_next_page
       return unless next_page?
 
-      params = CGI.parse(URI.parse(@next_page).query)
-      @next_page_method.call(params)
+      @next_page_method.call(@next_page, @transform_mapping, @root_key)
     end
   end
 end
