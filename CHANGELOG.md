@@ -1,6 +1,6 @@
-## 2.0.0
+## 2.0.0rc1
 
-Date: unreleased
+Date: 2015-11-02
 
 **Breaking change - switched to v3 API**
 
