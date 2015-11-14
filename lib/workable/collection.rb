@@ -9,10 +9,10 @@ module Workable
       @data = data
 
       if paging
-        @next_page = paging['next']
-        @next_page_method = next_page_method
+        @next_page         = paging['next']
+        @next_page_method  = next_page_method
         @transform_mapping = transform_mapping
-        @root_key = root_key
+        @root_key          = root_key
       end
     end
 

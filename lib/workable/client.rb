@@ -133,7 +133,7 @@ module Workable
 
     # build the url to api
     def api_url
-      'https://www.workable.com/spi/v%s/accounts/%s' % [Workable::API_VERSION, subdomain]
+      @_api_url ||= 'https://www.workable.com/spi/v%s/accounts/%s' % [Workable::API_VERSION, subdomain]
     end
 
     # do the get request to api
@@ -157,7 +157,9 @@ module Workable
       http.use_ssl = true
 
       request = type.new(uri.request_uri, headers)
+
       yield request if block_given?
+
       response = http.request(request)
 
       parse!(response)
@@ -166,9 +168,9 @@ module Workable
     # parse the api response
     def parse!(response)
       case response.code.to_i
-      when 204, 205  # handled no response
+      when 204, 205
         nil
-      when 200...300 # handled with response
+      when 200...300
         JSON.parse(response.body)
       when 401
         fail Errors::NotAuthorized, JSON.parse(response.body)['error']
