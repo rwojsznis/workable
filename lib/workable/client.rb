@@ -219,11 +219,11 @@ module Workable
       response = get_request(url, params)
 
       Collection.new(
-        @transform_to.apply(transform_mapping, response[root_key]),
-        method(__callee__),
-        transform_mapping,
-        root_key,
-        response['paging'])
+        data: @transform_to.apply(transform_mapping, response[root_key]),
+        next_page_method: method(__callee__),
+        transform_mapping: transform_mapping,
+        root_key: root_key,
+        paging: response['paging'])
     end
 
     def configuration_error(message)

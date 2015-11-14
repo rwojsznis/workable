@@ -2,7 +2,7 @@
 
 Date: 2015-11-14
 
-Official 2.0 release
+**Breaking change - dropped support for ruby 1.9.3**
 
 ## 2.0.0rc1
 
