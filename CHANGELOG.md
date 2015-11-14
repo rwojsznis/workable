@@ -2,7 +2,7 @@
 
 Date: 2015-11-14
 
-**Breaking change - dropped support for ruby 1.9.3**
+**Breaking change - Ruby >= 2.1 required**
 
 ## 2.0.0rc1
 
