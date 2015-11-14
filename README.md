@@ -6,7 +6,7 @@
 [![Gem Version](https://badge.fury.io/rb/workable.svg)](http://badge.fury.io/rb/workable)
 [![Dependency Status](https://gemnasium.com/emq/workable.svg)](https://gemnasium.com/emq/workable)
 
-Dead-simple Ruby API client for [workable.com][1]. No extra runtime dependencies. Ruby >= 1.9.3.
+Dead-simple Ruby API client for [workable.com][1]. No extra runtime dependencies.
 
 Uses v3 API provided by workable.
 
