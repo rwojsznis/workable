@@ -40,6 +40,16 @@ client = Workable::Client.new(api_key: 'api_key', subdomain: 'your_subdomain')
 # takes optional phase argument (string): 'published' (default), 'draft', 'closed' or 'archived'
 client.jobs # => Workable::Collection
 
+# Workable::Collection example
+jobs = client.jobs
+loop do
+  jobs.each do |job|
+    # Do something with the job
+  end
+  break unless jobs.next_page?
+  jobs = jobs.fetch_next_page
+end
+
 shortcode = client.jobs.first["shortcode"]
 
 # API queries are not cached (at all) - it's up to you to cache results one way or another
