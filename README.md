@@ -70,7 +70,7 @@ client.create_job_candidate(candidate, shortcode, stage_slug) # => Hash (stage_s
 # Possible errors (each one inherits from Workable::Errors::WorkableError)
 Workable::Errors::InvalidConfiguration # missing api_key / subdomain
 Workable::Errors::NotAuthorized   # wrong api key
-Workable::Errors::InvalidResponse # something when wrong during the request?
+Workable::Errors::InvalidResponse # something went wrong during the request?
 Workable::Errors::NotFound        # 404 from workable
 Workable::Errors::RequestToLong   # When the requested result takes to long to calculate, try limiting your query
 ```
