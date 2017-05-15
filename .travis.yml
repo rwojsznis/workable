@@ -5,13 +5,10 @@ cache: bundler
 rvm:
   - 2.1
   - 2.2
+  - 2.3
+  - 2.4
   - jruby-head
-  - rbx-2
   - ruby-head
 
 notifications:
   email: false
-
-matrix:
-  allow_failures:
-    - rvm: rbx-2
