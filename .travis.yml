@@ -10,5 +10,10 @@ rvm:
   - jruby-head
   - ruby-head
 
+# https://github.com/travis-ci/travis-ci/issues/5861
+before_install:
+  - gem install bundler
+  - gem update bundler
+
 notifications:
   email: false
