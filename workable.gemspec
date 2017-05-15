@@ -22,5 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.1.0'
   spec.add_development_dependency 'webmock', '~> 1.20.4'
-  spec.add_development_dependency 'coveralls', '~> 0.8.9'
+  spec.add_development_dependency 'coveralls', '~> 0.8.21'
 end
