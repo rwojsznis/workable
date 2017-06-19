@@ -2,7 +2,7 @@
 
 Date: 2017-06-19
 
-- `application_form` endpoint handler #11 (@klaszcze)
+- `application_form` endpoint handler [#11](https://github.com/emq/workable/pull/11) (@klaszcze)
 
 ## 2.0.0
 
