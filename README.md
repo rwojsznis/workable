@@ -58,7 +58,7 @@ client.stages     # => Array of hashes
 client.recruiters # => Array of hashes
 client.job_details(shortcode)    # => Hash
 client.job_questions(shortcode)  # => Array of hashes
-client.job_application_form(shortcode) # => Hash 
+client.job_application_form(shortcode) # => Hash
 client.job_candidates(shortcode, :stage => stage_slug, :limit => 100) # => Array of hashes:
 #   if given stage limits to given stage
 #   if given limit lists the last `limit` added candidates

@@ -1,3 +1,9 @@
+## 2.1.0
+
+Date: 2017-06-19
+
+- `application_form` endpoint handler #11 (@klaszcze)
+
 ## 2.0.0
 
 Date: 2015-11-14
