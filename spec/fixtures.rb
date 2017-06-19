@@ -29,6 +29,10 @@ def job_questions_json_fixture
   read_fixture 'job_questions.json'
 end
 
+def job_application_form_fixture
+  read_fixture 'job_application_form.json'
+end
+
 def recruiters_json_fixture
   read_fixture 'recruiters.json'
 end

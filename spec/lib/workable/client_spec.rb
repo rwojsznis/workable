@@ -139,6 +139,24 @@ describe Workable::Client do
     end
   end
 
+  describe '#job_application_form' do
+    it 'returns application form for given job' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/application_form')
+        .to_return(status: 200, body: job_application_form_fixture)
+
+      form = client.job_application_form('03FF356C8B')
+      expect(form).to be_kind_of(Hash)
+      expect(form.has_key?('questions')).to eq true
+      expect(form['form_fields'][0]).to eq({
+                                            'key' => 'phone',
+                                            'label' => 'Phone',
+                                            'type' => 'string',
+                                            'required' => true
+                                           })
+
+    end
+  end
+
   describe '#job_members' do
     it "returns array of job's members" do
       stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/job_slug/members')
