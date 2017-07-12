@@ -133,6 +133,24 @@ module Workable
       @transform_to.apply(:candidate, response['candidate'])
     end
 
+    # list candidates
+    # @param  params [Hash]   extra options like `state` or `limit`
+    # @option params :state [String]        optional state slug, if not given candidates are listed for all stages
+    # @option params :limit [Number|String] optional limit of candidates to download, if not given all candidates are listed
+    # @option params :since_id [String] Returns results with an ID more than or equal to the specified ID.
+    # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
+    # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
+    # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
+    def candidates(params = {})
+      build_collection("candidates", :candidate, 'candidates', params)
+    end
+
+    # return the full object of a specific candidate
+    # @param id [String] candidates's id
+    def candidate(id)
+      @transform_to.apply(:candidate, get_request("candidates/#{id}")['candidate'])
+    end
+
     # list activities for given candidate
     # @param  id [String] candidate id to get activities from
     # @param  params [Hash]   extra options like `state` or `limit`
@@ -142,7 +160,7 @@ module Workable
     # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
     # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
     # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
-    def candidate_activities(id, params = {})
+    def candidate_activity(id, params = {})
       build_collection("candidates/#{id}/activities", :activity, 'activities', params)
     end
 
