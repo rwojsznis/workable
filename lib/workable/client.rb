@@ -146,6 +146,21 @@ module Workable
       build_collection("candidates/#{id}/activities", :activity, 'activities', params)
     end
 
+    # create a comment for given candidate
+    # @param  candidate_id [String] candidate id to create a comment for
+    # @param  member_id    [String] id of the member that created the comment
+    # @param  comment_body [String] body of the comment that will be created
+    def create_candidate_comment(candidate_id, member_id, comment_body)
+      post_request("candidates/#{candidate_id}/comments") do |request|
+        request.body = @transform_from.apply(:comment, {
+          member_id: member_id,
+          comment: {
+            body: comment_body,
+          }
+        }).to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
@@ -187,7 +202,7 @@ module Workable
     # parse the api response
     def parse!(response)
       case response.code.to_i
-      when 204, 205
+      when 201, 204, 205
         nil
       when 200...300
         JSON.parse(response.body)
