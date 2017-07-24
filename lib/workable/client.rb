@@ -133,6 +133,14 @@ module Workable
       @transform_to.apply(:candidate, response['candidate'])
     end
 
+    def update_candidate(candidate_id, candidate)
+      response = patch_request("candidates/#{candidate_id}") do |request|
+        request.body = @transform_from.apply(:candidate, candidate).to_json
+      end
+
+      @transform_to.apply(:candidate, response['candidate'])
+    end
+
     # list candidates
     # @param  params [Hash]   extra options like `state` or `limit`
     # @option params :state [String]        optional state slug, if not given candidates are listed for all stages
@@ -202,6 +210,13 @@ module Workable
       end
     end
 
+    # do the post request to api
+    def patch_request(url)
+      do_request(url, Net::HTTP::Patch) do |request|
+        yield(request) if block_given?
+      end
+    end
+
     # generic part of requesting api
     def do_request(url, type, &_block)
       uri = URI.parse("#{api_url}/#{url}")
@@ -220,10 +235,10 @@ module Workable
     # parse the api response
     def parse!(response)
       case response.code.to_i
-      when 201, 204, 205
+      when 204, 205
         nil
       when 200...300
-        JSON.parse(response.body)
+        JSON.parse(response.body) if response.body.present?
       when 401
         fail Errors::NotAuthorized, JSON.parse(response.body)['error']
       when 404
