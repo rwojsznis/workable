@@ -192,7 +192,7 @@ module Workable
         request.body = {
           member_id: member_id,
           target_stage: target_stage
-        }
+        }.to_json
       end
     end
 
