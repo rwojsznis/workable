@@ -187,6 +187,15 @@ module Workable
       end
     end
 
+    def move(candidate_id, member_id, target_stage)
+      post_request("candidates/#{candidate_id}/move") do |request|
+        request.body = {
+          member_id: member_id,
+          target_stage: target_stage
+        }
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
