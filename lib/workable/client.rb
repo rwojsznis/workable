@@ -133,6 +133,22 @@ module Workable
       @transform_to.apply(:candidate, response['candidate'])
     end
 
+    # create a comment on the candidate's timeline
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member leaving the comment
+    # @param comment_text [String] the comment's text
+    # @param policy [String] option to set the view rights of the comment
+    # @param attachment [Hash] optional attachment for the comment
+    # @param attachment :name [String] filename of the attachment
+    # @param attachment :data [String] payload of the attachment, encoded in base64
+    def create_comment(candidate_id, member_id, comment_text, policy=[], attachment=nil)
+      comment = { body: comment_text, policy: policy, attachment: attachment }
+
+      post_request("candidates/#{candidate_id}/comments") do |request|
+        request.body = {member_id: member_id.to_s, comment: comment}.to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
@@ -177,7 +193,7 @@ module Workable
       when 204, 205
         nil
       when 200...300
-        JSON.parse(response.body)
+        JSON.parse(response.body) if response.body
       when 401
         fail Errors::NotAuthorized, JSON.parse(response.body)['error']
       when 404

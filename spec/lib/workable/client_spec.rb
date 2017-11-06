@@ -148,11 +148,11 @@ describe Workable::Client do
       expect(form).to be_kind_of(Hash)
       expect(form.has_key?('questions')).to eq true
       expect(form['form_fields'][0]).to eq({
-                                            'key' => 'phone',
-                                            'label' => 'Phone',
-                                            'type' => 'string',
-                                            'required' => true
-                                           })
+        'key' => 'phone',
+        'label' => 'Phone',
+        'type' => 'string',
+        'required' => true
+      })
 
     end
   end
@@ -190,7 +190,7 @@ describe Workable::Client do
   describe '#job_candidates' do
     context 'happy path' do
       let(:candidates){ client.job_candidates('03FF356C8B') }
-    before do
+      before do
         stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/03FF356C8B/candidates')
           .to_return(status: 200, body: job_candidates_json_fixture)
       end
@@ -238,6 +238,30 @@ describe Workable::Client do
 
       candidate = client.create_job_candidate(new_candiate_hash_fixture, 'slug')
       expect(candidate['id']).to eq('3fc9a80f')
+    end
+  end
+
+  describe '#create_comment' do
+    let(:candidate_id) { '123456' }
+    let(:member_id) { '314' }
+    let(:comment_text) { "Hire this person!" }
+    let(:body) do
+      {
+        member_id: member_id,
+        comment: {
+          body: comment_text,
+          policy: [],
+          attachment: nil
+        }
+      }
+    end
+
+    it 'submits POST request' do
+      stub = stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/candidates/123456/comments')
+        .with(body: body.to_json)
+
+      client.create_comment(candidate_id, member_id, comment_text)
+      expect(stub).to have_been_requested.once
     end
   end
 end
