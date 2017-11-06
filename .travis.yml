@@ -4,11 +4,11 @@ cache: bundler
 
 rvm:
   - 2.1.10
-  - 2.2.7
-  - 2.3.4
-  - 2.4.1
+  - 2.2.8
+  - 2.3.5
+  - 2.4.2
+  - 2.5.0-preview1
   - jruby-head
-  - ruby-head
 
 # https://github.com/travis-ci/travis-ci/issues/5861
 before_install:
