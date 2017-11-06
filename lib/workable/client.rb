@@ -134,46 +134,46 @@ module Workable
     end
 
     # create a comment on the candidate's timeline
-    # @param candidate_id [Number|String] the candidate's id
-    # @param member_id [Number|String] id of the member leaving the comment
+    # @param candidate_id [String] the candidate's id
+    # @param member_id [String] id of the member leaving the comment
     # @param comment_text [String] the comment's text
     # @param policy [String] option to set the view rights of the comment
     # @param attachment [Hash] optional attachment for the comment
     # @param attachment :name [String] filename of the attachment
     # @param attachment :data [String] payload of the attachment, encoded in base64
-    def create_comment(candidate_id, member_id, comment_text, policy=[], attachment=nil)
+    def create_comment(candidate_id, member_id, comment_text, policy = [], attachment = nil)
       comment = { body: comment_text, policy: policy, attachment: attachment }
 
       post_request("candidates/#{candidate_id}/comments") do |request|
-        request.body = {member_id: member_id.to_s, comment: comment}.to_json
+        request.body = { member_id: member_id, comment: comment }.to_json
       end
     end
 
     # disqualify a candidate
-    # @param candidate_id [Number|String] the candidate's id
-    # @param member_id [Number|String] id of the member performing the disqualification
+    # @param candidate_id [String] the candidate's id
+    # @param member_id [String] id of the member performing the disqualification
     # @param reason [String] why the candidate should be disqualified
-    def disqualify(candidate_id, member_id, reason=nil)
+    def disqualify(candidate_id, member_id, reason = nil)
       post_request("candidates/#{candidate_id}/disqualify") do |request|
-        request.body = {member_id: member_id.to_s, disqualification_reason: reason}.to_json
+        request.body = { member_id: member_id, disqualification_reason: reason }.to_json
       end
     end
 
     # revert a candidate's disqualification
-    # @param candidate_id [Number|String] the candidate's id
-    # @param member_id [Number|String] id of the member reverting the disqualification
+    # @param candidate_id [String] the candidate's id
+    # @param member_id [String] id of the member reverting the disqualification
     def revert(candidate_id, member_id)
       post_request("candidates/#{candidate_id}/revert") do |request|
-        request.body = {member_id: member_id.to_s}.to_json
+        request.body = { member_id: member_id }.to_json
       end
     end
 
     # copy a candidate to another job
-    # @param candidate_id [Number|String] the candidate's id
-    # @param member_id [Number|String] id of the member performing the copy
+    # @param candidate_id [String] the candidate's id
+    # @param member_id [String] id of the member performing the copy
     # @param shortcode [String] shortcode of the job that the candidate will be copied to
     # @param stage [String] stage the candidate should be copied to
-    def copy(candidate_id, member_id, shortcode, stage=nil)
+    def copy(candidate_id, member_id, shortcode, stage = nil)
       body = {
         member_id: member_id,
         target_job_shortcode: shortcode,
@@ -192,7 +192,7 @@ module Workable
     # @param member_id [Number|String] id of the member performing the relocation
     # @param shortcode [String] shortcode of the job that the candidate will be moved to
     # @param stage [String] stage the candidate should be moved to
-    def relocate(candidate_id, member_id, shortcode, stage=nil)
+    def relocate(candidate_id, member_id, shortcode, stage = nil)
       body = {
         member_id: member_id,
         target_job_shortcode: shortcode,
@@ -207,8 +207,8 @@ module Workable
     end
 
     # moves a candidate to another stage
-    # @param candidate_id [Number|String] the candidate's id
-    # @param member_id [Number|String] id of the member performing the move
+    # @param candidate_id [String] the candidate's id
+    # @param member_id [String] id of the member performing the move
     # @param stage [String] stage the candidate should be moved to
     def move(candidate_id, member_id, stage)
       post_request("candidates/#{candidate_id}/move") do |request|
@@ -217,8 +217,8 @@ module Workable
     end
 
     # creates a rating for a candidate
-    # @param candidate_id [Number|String] the candidate's id
-    # @param member_id [Number|String] id of the member adding the rating
+    # @param candidate_id [String] the candidate's id
+    # @param member_id [String] id of the member adding the rating
     # @param comment [String] a comment about the scoring of the candidate
     # @param score [String] one of 'negative', 'positive', or 'definitely'
     def create_rating(candidate_id, member_id, comment, score)
