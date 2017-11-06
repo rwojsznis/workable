@@ -4,6 +4,7 @@ require 'net/http'
 require 'date'
 require 'ostruct'
 require 'cgi'
+require 'forwardable'
 
 require_relative 'workable/version'
 require_relative 'workable/errors'
