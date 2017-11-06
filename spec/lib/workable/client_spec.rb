@@ -233,10 +233,10 @@ describe Workable::Client do
   describe '#create_job_candidate' do
     it 'POSTs requests and parses response' do
       stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/slug/candidates')
-        .with(body: new_candiate_hash_fixture.to_json)
-        .to_return(status: 200, body: new_candiate_response_json_fixture)
+        .with(body: new_candidate_hash_fixture.to_json)
+        .to_return(status: 200, body: new_candidate_response_json_fixture)
 
-      candidate = client.create_job_candidate(new_candiate_hash_fixture, 'slug')
+      candidate = client.create_job_candidate(new_candidate_hash_fixture, 'slug')
       expect(candidate['id']).to eq('3fc9a80f')
     end
   end
