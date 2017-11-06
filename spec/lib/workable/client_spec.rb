@@ -284,4 +284,20 @@ describe Workable::Client do
       expect(stub).to have_been_requested.once
     end
   end
+
+  describe '#revert' do
+    let(:candidate_id) { '123456' }
+    let(:member_id) { '314' }
+    let(:body) do
+      { member_id: member_id }
+    end
+
+    it 'submits POST request' do
+      stub = stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/candidates/123456/revert')
+        .with(body: body.to_json)
+
+      client.revert(candidate_id, member_id)
+      expect(stub).to have_been_requested.once
+    end
+  end
 end

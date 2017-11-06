@@ -159,6 +159,15 @@ module Workable
       end
     end
 
+    # revert a candidate's disqualification
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member reverting the disqualification
+    def revert(candidate_id, member_id)
+      post_request("candidates/#{candidate_id}/revert") do |request|
+        request.body = {member_id: member_id.to_s}.to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
