@@ -168,6 +168,44 @@ module Workable
       end
     end
 
+    # copy a candidate to another job
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the copy
+    # @param shortcode [String] shortcode of the job that the candidate will be copied to
+    # @param stage [String] stage the candidate should be copied to
+    def copy(candidate_id, member_id, shortcode, stage=nil)
+      body = {
+        member_id: member_id,
+        target_job_shortcode: shortcode,
+        target_stage: stage
+      }
+
+      response = post_request("candidates/#{candidate_id}/copy") do |request|
+        request.body = body.to_json
+      end
+
+      @transform_to.apply(:candidate, response['candidate'])
+    end
+
+    # moves a candidate to another job
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the relocation
+    # @param shortcode [String] shortcode of the job that the candidate will be moved to
+    # @param stage [String] stage the candidate should be moved to
+    def relocate(candidate_id, member_id, shortcode, stage=nil)
+      body = {
+        member_id: member_id,
+        target_job_shortcode: shortcode,
+        target_stage: stage
+      }
+
+      response = post_request("candidates/#{candidate_id}/relocate") do |request|
+        request.body = body.to_json
+      end
+
+      @transform_to.apply(:candidate, response['candidate'])
+    end
+
     private
 
     attr_reader :api_key, :subdomain

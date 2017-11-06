@@ -300,4 +300,50 @@ describe Workable::Client do
       expect(stub).to have_been_requested.once
     end
   end
+
+  describe '#copy' do
+    let(:candidate_id) { '123456' }
+    let(:member_id) { '314' }
+    let(:shortcode) { 'GROOV005' }
+    let(:stage) { 'applied' }
+    let(:body) do
+      {
+        member_id: member_id,
+        target_job_shortcode: shortcode,
+        target_stage: stage
+      }
+    end
+
+    it 'POSTs requests and parses response' do
+      stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/candidates/123456/copy')
+        .with(body: body.to_json)
+        .to_return(status: 201, body: copy_candidate_response_json_fixture)
+
+      candidate = client.copy(candidate_id, member_id, shortcode, stage)
+      expect(candidate['id']).to eq(candidate_id)
+    end
+  end
+
+  describe '#relocate' do
+    let(:candidate_id) { '123456' }
+    let(:member_id) { '314' }
+    let(:shortcode) { 'GROOV005' }
+    let(:stage) { 'applied' }
+    let(:body) do
+      {
+        member_id: member_id,
+        target_job_shortcode: shortcode,
+        target_stage: stage
+      }
+    end
+
+    it 'POSTs requests and parses response' do
+      stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/candidates/123456/relocate')
+        .with(body: body.to_json)
+        .to_return(status: 201, body: relocate_candidate_response_json_fixture)
+
+      candidate = client.relocate(candidate_id, member_id, shortcode, stage)
+      expect(candidate['id']).to eq(candidate_id)
+    end
+  end
 end

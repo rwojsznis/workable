@@ -49,6 +49,14 @@ def new_candidate_response_json_fixture
   read_fixture 'new_candidate_response.json'
 end
 
+def copy_candidate_response_json_fixture
+  read_fixture 'copy_candidate_response.json'
+end
+
+def relocate_candidate_response_json_fixture
+  read_fixture 'relocate_candidate_response.json'
+end
+
 def read_fixture(filename)
   File.read File.expand_path("../fixtures/#{filename}", __FILE__)
 end
