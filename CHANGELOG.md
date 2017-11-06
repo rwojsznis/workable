@@ -1,3 +1,9 @@
+## 2.2.0
+
+Date: 2017-11-09
+
+- manage candidates endpoints support [#12](https://github.com/emq/workable/pull/12) (@aquateen)
+
 ## 2.1.0
 
 Date: 2017-06-19

@@ -56,6 +56,8 @@ shortcode = client.jobs.first["shortcode"]
 
 client.stages     # => Array of hashes
 client.recruiters # => Array of hashes
+client.members    # => Array of hashes
+
 client.job_details(shortcode)    # => Hash
 client.job_questions(shortcode)  # => Array of hashes
 client.job_application_form(shortcode) # => Hash
@@ -67,6 +69,15 @@ client.job_candidates(shortcode, :stage => stage_slug, :limit => 100) # => Array
 #   http://resources.workable.com/add-candidates-using-api
 
 client.create_job_candidate(candidate, shortcode, stage_slug) # => Hash (stage_slug is optional)
+
+# managing candidates
+client.disqualify(candidate_id, member_id, reason)
+client.revert(candidate_id, member_id) # reverts disqualification
+client.copy(candidate_id, member_id, shortcode, stage)
+client.relocate(candidate_id, member_id, shortcode, stage)
+client.move(candidate_id, member_id, stage)
+client.create_rating(candidate_id, member_id, comment, score)
+client.create_comment(candidate_id, member_id, comment_text, attachment)
 
 # Possible errors (each one inherits from Workable::Errors::WorkableError)
 Workable::Errors::InvalidConfiguration # missing api_key / subdomain
