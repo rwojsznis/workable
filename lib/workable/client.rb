@@ -216,6 +216,23 @@ module Workable
       end
     end
 
+    # creates a rating for a candidate
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member adding the rating
+    # @param comment [String] a comment about the scoring of the candidate
+    # @param score [String] one of 'negative', 'positive', or 'definitely'
+    def create_rating(candidate_id, member_id, comment, score)
+      body = {
+        member_id: member_id,
+        comment: comment,
+        score: score
+      }
+
+      post_request("candidates/#{candidate_id}/ratings") do |request|
+        request.body = body.to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
