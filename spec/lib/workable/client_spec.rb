@@ -346,4 +346,24 @@ describe Workable::Client do
       expect(candidate['id']).to eq(candidate_id)
     end
   end
+
+  describe '#move' do
+    let(:candidate_id) { '123456' }
+    let(:member_id) { '314' }
+    let(:stage ) { 'applied' }
+    let(:body) do
+      {
+        member_id: member_id,
+        target_stage: stage
+      }
+    end
+
+    it 'submits POST request' do
+      stub = stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/candidates/123456/move')
+        .with(body: body.to_json)
+
+      client.move(candidate_id, member_id, stage)
+      expect(stub).to have_been_requested.once
+    end
+  end
 end

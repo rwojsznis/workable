@@ -206,6 +206,16 @@ module Workable
       @transform_to.apply(:candidate, response['candidate'])
     end
 
+    # moves a candidate to another stage
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the move
+    # @param stage [String] stage the candidate should be moved to
+    def move(candidate_id, member_id, stage)
+      post_request("candidates/#{candidate_id}/move") do |request|
+        request.body = { member_id: member_id, target_stage: stage }.to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
