@@ -149,6 +149,16 @@ module Workable
       end
     end
 
+    # disqualify a candidate
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the disqualification
+    # @param reason [String] why the candidate should be disqualified
+    def disqualify(candidate_id, member_id, reason=nil)
+      post_request("candidates/#{candidate_id}/disqualify") do |request|
+        request.body = {member_id: member_id.to_s, disqualification_reason: reason}.to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
