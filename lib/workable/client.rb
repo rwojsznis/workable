@@ -133,6 +133,106 @@ module Workable
       @transform_to.apply(:candidate, response['candidate'])
     end
 
+    # create a comment on the candidate's timeline
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member leaving the comment
+    # @param comment_text [String] the comment's text
+    # @param policy [String] option to set the view rights of the comment
+    # @param attachment [Hash] optional attachment for the comment
+    # @param attachment :name [String] filename of the attachment
+    # @param attachment :data [String] payload of the attachment, encoded in base64
+    def create_comment(candidate_id, member_id, comment_text, policy=[], attachment=nil)
+      comment = { body: comment_text, policy: policy, attachment: attachment }
+
+      post_request("candidates/#{candidate_id}/comments") do |request|
+        request.body = {member_id: member_id.to_s, comment: comment}.to_json
+      end
+    end
+
+    # disqualify a candidate
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the disqualification
+    # @param reason [String] why the candidate should be disqualified
+    def disqualify(candidate_id, member_id, reason=nil)
+      post_request("candidates/#{candidate_id}/disqualify") do |request|
+        request.body = {member_id: member_id.to_s, disqualification_reason: reason}.to_json
+      end
+    end
+
+    # revert a candidate's disqualification
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member reverting the disqualification
+    def revert(candidate_id, member_id)
+      post_request("candidates/#{candidate_id}/revert") do |request|
+        request.body = {member_id: member_id.to_s}.to_json
+      end
+    end
+
+    # copy a candidate to another job
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the copy
+    # @param shortcode [String] shortcode of the job that the candidate will be copied to
+    # @param stage [String] stage the candidate should be copied to
+    def copy(candidate_id, member_id, shortcode, stage=nil)
+      body = {
+        member_id: member_id,
+        target_job_shortcode: shortcode,
+        target_stage: stage
+      }
+
+      response = post_request("candidates/#{candidate_id}/copy") do |request|
+        request.body = body.to_json
+      end
+
+      @transform_to.apply(:candidate, response['candidate'])
+    end
+
+    # moves a candidate to another job
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the relocation
+    # @param shortcode [String] shortcode of the job that the candidate will be moved to
+    # @param stage [String] stage the candidate should be moved to
+    def relocate(candidate_id, member_id, shortcode, stage=nil)
+      body = {
+        member_id: member_id,
+        target_job_shortcode: shortcode,
+        target_stage: stage
+      }
+
+      response = post_request("candidates/#{candidate_id}/relocate") do |request|
+        request.body = body.to_json
+      end
+
+      @transform_to.apply(:candidate, response['candidate'])
+    end
+
+    # moves a candidate to another stage
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member performing the move
+    # @param stage [String] stage the candidate should be moved to
+    def move(candidate_id, member_id, stage)
+      post_request("candidates/#{candidate_id}/move") do |request|
+        request.body = { member_id: member_id, target_stage: stage }.to_json
+      end
+    end
+
+    # creates a rating for a candidate
+    # @param candidate_id [Number|String] the candidate's id
+    # @param member_id [Number|String] id of the member adding the rating
+    # @param comment [String] a comment about the scoring of the candidate
+    # @param score [String] one of 'negative', 'positive', or 'definitely'
+    def create_rating(candidate_id, member_id, comment, score)
+      body = {
+        member_id: member_id,
+        comment: comment,
+        score: score
+      }
+
+      post_request("candidates/#{candidate_id}/ratings") do |request|
+        request.body = body.to_json
+      end
+    end
+
     private
 
     attr_reader :api_key, :subdomain
@@ -177,7 +277,7 @@ module Workable
       when 204, 205
         nil
       when 200...300
-        JSON.parse(response.body)
+        JSON.parse(response.body) if !response.body.to_s.empty?
       when 401
         fail Errors::NotAuthorized, JSON.parse(response.body)['error']
       when 404

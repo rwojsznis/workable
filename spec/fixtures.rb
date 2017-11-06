@@ -41,12 +41,20 @@ def members_json_fixture
   read_fixture 'members.json'
 end
 
-def new_candiate_hash_fixture
+def new_candidate_hash_fixture
   JSON.parse(read_fixture('new_candidate.json'))
 end
 
-def new_candiate_response_json_fixture
+def new_candidate_response_json_fixture
   read_fixture 'new_candidate_response.json'
+end
+
+def copy_candidate_response_json_fixture
+  read_fixture 'copy_candidate_response.json'
+end
+
+def relocate_candidate_response_json_fixture
+  read_fixture 'relocate_candidate_response.json'
 end
 
 def read_fixture(filename)
