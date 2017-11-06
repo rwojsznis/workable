@@ -277,7 +277,7 @@ module Workable
       when 204, 205
         nil
       when 200...300
-        JSON.parse(response.body) if response.body
+        JSON.parse(response.body) if !response.body.to_s.empty?
       when 401
         fail Errors::NotAuthorized, JSON.parse(response.body)['error']
       when 404
