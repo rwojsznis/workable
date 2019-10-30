@@ -202,7 +202,7 @@ module Workable
 
     # build the url to api
     def api_url
-      @_api_url ||= 'https://www.workable.com/spi/v%s/accounts/%s' % [Workable::API_VERSION, subdomain]
+      @_api_url ||= 'https://%s.workable.com/spi/v%s/accounts/%s' % [subdomain, Workable::API_VERSION, subdomain]
     end
 
     # do the get request to api
