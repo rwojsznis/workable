@@ -17,6 +17,12 @@ module Workable
       end
     end
 
+    def next_page_since_id
+      return if @next_page.nil?
+
+      @next_page.match(/since_id=([^&]*)/)[1]
+    end
+
     def next_page?
       !! @next_page
     end
