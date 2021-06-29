@@ -4,6 +4,7 @@ module Workable
     def_delegators :@data, :size, :each, :[], :map, :first
 
     attr_reader :data
+    attr_reader :next_page
 
     def initialize(data:, next_page_method:, transform_mapping:, root_key:, paging: nil)
       @data = data

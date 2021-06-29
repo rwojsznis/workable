@@ -54,6 +54,18 @@ module Workable
       @transform_to.apply(:stage, get_request('stages')['stages'])
     end
 
+    # request candidates
+    # @option params [Hash] optional filter parameters
+    # @option params :state [String] Returns candidates with the current state. Possible values (draft, published, archived & closed)
+    # @option params :limit [Integer] Specifies the number of candidates to try and retrieve per page
+    # @option params :since_id [String] Returns results with an ID more than or equal to the specified ID.
+    # @option params :max_id [String] Returns results with an ID less than or equal to the specified ID.
+    # @option params :created_after [Timestamp|Integer] Returns results created after the specified timestamp.
+    # @option params :updated_after [Timestamp|Integer] Returns results updated after the specified timestamp.
+    def candidates(params = {})
+      build_collection('candidates', :candidates, 'candidates', params)
+    end
+
     # request posted jobs
     # @option params [Hash] optional filter parameters
     # @option params :state [String] Returns jobs with the current state. Possible values (draft, published, archived & closed)
