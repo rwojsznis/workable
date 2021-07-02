@@ -249,13 +249,21 @@ module Workable
       end
     end
 
+    def events(params = {})
+      build_collection('events', :event, 'events', params)
+    end
+
+    def event(id)
+      @transform_to.apply(:event, get_request("events/#{id}"))
+    end
+
     private
 
     attr_reader :api_key, :subdomain
 
     # build the url to api
     def api_url
-      @_api_url ||= 'https://www.workable.com/spi/v%s/accounts/%s' % [Workable::API_VERSION, subdomain]
+      @_api_url ||= 'https://%s.workable.com/spi/v%s' % [subdomain, Workable::API_VERSION]
     end
 
     # do the get request to api
