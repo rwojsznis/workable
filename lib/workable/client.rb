@@ -66,6 +66,10 @@ module Workable
       build_collection('candidates', :candidates, 'candidates', params)
     end
 
+    def candidate(id)
+      @transform_to.apply(:candidate, get_request("candidates/#{id}"))
+    end
+
     # request posted jobs
     # @option params [Hash] optional filter parameters
     # @option params :state [String] Returns jobs with the current state. Possible values (draft, published, archived & closed)
