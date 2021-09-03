@@ -297,6 +297,11 @@ module Workable
 
     # parse the api response
     def parse!(response)
+      # Fail faster so that the API doesn't penalise us with a larger reset date as often.
+      if response['X-Rate-Limit-Remaining'].to_i <= 1
+        fail Errors::RateLimitExceeded, parse_rate_limit_headers(response)
+      end
+
       case response.code.to_i
       when 204, 205
         nil
