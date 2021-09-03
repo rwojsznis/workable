@@ -308,11 +308,21 @@ module Workable
         fail Errors::NotFound, JSON.parse(response.body)['error']
       when 422
         handle_response_422(response)
+      when 429
+        fail Errors::RateLimitExceeded, parse_rate_limit_headers(response)
       when 503
         fail Errors::RequestToLong, response.body
       else
         fail Errors::InvalidResponse, "Response code: #{response.code} message: #{response.body}"
       end
+    end
+
+    def parse_rate_limit_headers(response)
+      {
+        rate_limit_max_requests: response['X-Rate-Limit-Limit'].to_i,
+        rate_limit_remaining_request: response['X-Rate-Limit-Remaining'].to_i,
+        rate_limit_reset_at: Time.at(response['X-Rate-Limit-Reset'].to_i)
+      }
     end
 
     def handle_response_422(response)
