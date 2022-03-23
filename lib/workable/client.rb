@@ -257,6 +257,19 @@ module Workable
       @transform_to.apply(:event, get_request("events/#{id}"))
     end
 
+    def refresh_access_token(client_id, client_secret, refresh_token)
+      uri = URI.parse('https://www.workable.com/oauth/token')
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      auth_headers = get_auth_headers(client_id, client_secret, refresh_token)
+      request = Net::HTTP::Post.new(uri.request_uri, auth_headers)
+
+      response = http.request(request)
+
+      parse!(response)
+    end
+
     private
 
     attr_reader :api_key, :subdomain
@@ -348,6 +361,19 @@ module Workable
         'Accept'        => 'application/json',
         'Authorization' => "Bearer #{api_key}",
         'Content-Type'  => 'application/json',
+        'User-Agent'    => 'Workable Ruby Client'
+      }
+    end
+
+    # headers for getting the access token
+    def get_auth_headers(client_id, client_secret, refresh_token)
+      {
+        'Accept'        => 'application/json',
+        'client_id' => "#{client_id}",
+        'client_secret' => "#{client_secret}",
+        'Content-Type'  => 'application/json',
+        'grant_type' => 'refresh_token',
+        'refresh_token' => "#{refresh_token}",
         'User-Agent'    => 'Workable Ruby Client'
       }
     end
