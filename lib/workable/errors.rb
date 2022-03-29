@@ -3,6 +3,7 @@ module Workable
     class WorkableError        < StandardError; end
     class InvalidConfiguration < WorkableError; end
     class NotAuthorized        < WorkableError; end
+    class Forbidden            < WorkableError; end
     class InvalidResponse      < WorkableError; end
     class NotFound             < WorkableError; end
     class AlreadyExists        < WorkableError; end

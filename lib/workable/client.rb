@@ -27,6 +27,8 @@ module Workable
     #        candidate: &Hashie::Mash.method(:new)
     #      }
     #    )
+    AUTH_TOKEN_URL = 'https://www.workable.com/oauth/token'
+
     def initialize(options = {})
       @api_key   = options.fetch(:api_key)   { configuration_error 'Missing api_key argument'   }
       @subdomain = options.fetch(:subdomain) { configuration_error 'Missing subdomain argument' }
@@ -257,6 +259,19 @@ module Workable
       @transform_to.apply(:event, get_request("events/#{id}"))
     end
 
+    def refresh_access_token(client_id, client_secret, refresh_token)
+      uri = URI.parse(AUTH_TOKEN_URL)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+
+      auth_headers = get_auth_headers(client_id, client_secret, refresh_token)
+      request = Net::HTTP::Post.new(uri.request_uri, auth_headers)
+
+      response = http.request(request)
+
+      parse!(response)
+    end
+
     private
 
     attr_reader :api_key, :subdomain
@@ -310,6 +325,8 @@ module Workable
         JSON.parse(response.body) if !response.body.to_s.empty?
       when 401
         fail Errors::NotAuthorized, JSON.parse(response.body)['error']
+      when 403
+        fail Errors::Forbidden, JSON.parse(response.body)['error']
       when 404
         fail Errors::NotFound, JSON.parse(response.body)['error']
       when 422
@@ -348,6 +365,19 @@ module Workable
         'Accept'        => 'application/json',
         'Authorization' => "Bearer #{api_key}",
         'Content-Type'  => 'application/json',
+        'User-Agent'    => 'Workable Ruby Client'
+      }
+    end
+
+    # headers for getting the access token
+    def get_auth_headers(client_id, client_secret, refresh_token)
+      {
+        'Accept'        => 'application/json',
+        'client_id' => "#{client_id}",
+        'client_secret' => "#{client_secret}",
+        'Content-Type'  => 'application/json',
+        'grant_type' => 'refresh_token',
+        'refresh_token' => "#{refresh_token}",
         'User-Agent'    => 'Workable Ruby Client'
       }
     end
