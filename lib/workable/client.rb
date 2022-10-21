@@ -264,8 +264,8 @@ module Workable
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
 
-      auth_headers = get_auth_headers(client_id, client_secret, refresh_token)
       request = Net::HTTP::Post.new(uri.request_uri, auth_headers)
+      request.body = refresh_token_form(client_id, client_secret, refresh_token).to_json
 
       response = http.request(request)
 
@@ -278,7 +278,7 @@ module Workable
 
     # build the url to api
     def api_url
-      @_api_url ||= 'https://%s.workable.com/spi/v%s' % [subdomain, Workable::API_VERSION]
+      @_api_url ||= format('https://%s.workable.com/spi/v%s', subdomain, Workable::API_VERSION)
     end
 
     # do the get request to api
@@ -315,28 +315,28 @@ module Workable
       rate_limit_remaining_header = response['X-Rate-Limit-Remaining']
       # Fail faster so that the API doesn't penalise us with a larger reset date as often.
       if rate_limit_remaining_header.present? && rate_limit_remaining_header.to_i <= 1
-        fail Errors::RateLimitExceeded, parse_rate_limit_headers(response)
+        raise Errors::RateLimitExceeded, parse_rate_limit_headers(response)
       end
 
       case response.code.to_i
       when 204, 205
         nil
       when 200...300
-        JSON.parse(response.body) if !response.body.to_s.empty?
+        JSON.parse(response.body) unless response.body.to_s.empty?
       when 401
-        fail Errors::NotAuthorized, JSON.parse(response.body)['error']
+        raise Errors::NotAuthorized, JSON.parse(response.body)['error']
       when 403
-        fail Errors::Forbidden, JSON.parse(response.body)['error']
+        raise Errors::Forbidden, JSON.parse(response.body)['error']
       when 404
-        fail Errors::NotFound, JSON.parse(response.body)['error']
+        raise Errors::NotFound, JSON.parse(response.body)['error']
       when 422
         handle_response_422(response)
       when 429
-        fail Errors::RateLimitExceeded, parse_rate_limit_headers(response)
+        raise Errors::RateLimitExceeded, parse_rate_limit_headers(response)
       when 503
-        fail Errors::RequestToLong, response.body
+        raise Errors::RequestToLong, response.body
       else
-        fail Errors::InvalidResponse, "Response code: #{response.code} message: #{response.body}"
+        raise Errors::InvalidResponse, "Response code: #{response.code} message: #{response.body}"
       end
     end
 
@@ -353,32 +353,37 @@ module Workable
       if data['validation_errors'] &&
          data['validation_errors']['email'] &&
          data['validation_errors']['email'].include?('candidate already exists')
-        fail Errors::AlreadyExists, data['error']
+        raise Errors::AlreadyExists, data['error']
       else
-        fail Errors::NotFound, data['error']
+        raise Errors::NotFound, data['error']
       end
     end
 
     # default headers for authentication and JSON support
     def headers
       {
-        'Accept'        => 'application/json',
+        'Accept' => 'application/json',
         'Authorization' => "Bearer #{api_key}",
-        'Content-Type'  => 'application/json',
-        'User-Agent'    => 'Workable Ruby Client'
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Workable Ruby Client'
       }
     end
 
     # headers for getting the access token
-    def get_auth_headers(client_id, client_secret, refresh_token)
+    def auth_headers
       {
-        'Accept'        => 'application/json',
-        'client_id' => "#{client_id}",
-        'client_secret' => "#{client_secret}",
-        'Content-Type'  => 'application/json',
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'User-Agent' => 'Workable Ruby Client'
+      }
+    end
+
+    def refresh_token_form(client_id, client_secret, refresh_token)
+      {
+        'client_id' => client_id,
+        'client_secret' => client_secret,
         'grant_type' => 'refresh_token',
-        'refresh_token' => "#{refresh_token}",
-        'User-Agent'    => 'Workable Ruby Client'
+        'refresh_token' => refresh_token
       }
     end
 
@@ -391,7 +396,7 @@ module Workable
     end
 
     def build_collection(url, transform_mapping, root_key, params = {})
-      url = url.gsub(/#{api_url}\/?/, '')
+      url = url.gsub(%r{#{api_url}/?}, '')
       response = get_request(url, params)
 
       Collection.new(
@@ -399,11 +404,12 @@ module Workable
         next_page_method: method(__callee__),
         transform_mapping: transform_mapping,
         root_key: root_key,
-        paging: response['paging'])
+        paging: response['paging']
+      )
     end
 
     def configuration_error(message)
-      fail Errors::InvalidConfiguration, message
+      raise Errors::InvalidConfiguration, message
     end
   end
 end
