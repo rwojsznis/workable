@@ -230,6 +230,15 @@ describe Workable::Client do
     end
   end
 
+  describe '#offer' do
+    it 'returns detailed info about given candidate' do
+      stub_request(:get, 'https://www.workable.com/spi/v3/accounts/subdomain/candidates/12345/offer')
+        .to_return(status: 200, body: offer_json_fixture)
+
+      expect(client.offer('12345')['document_variables']).to be_kind_of(Array)
+    end
+  end
+
   describe '#create_job_candidate' do
     it 'POSTs requests and parses response' do
       stub_request(:post, 'https://www.workable.com/spi/v3/accounts/subdomain/jobs/slug/candidates')

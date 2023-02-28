@@ -134,6 +134,12 @@ module Workable
       @transform_to.apply(:candidate, get_request("jobs/#{shortcode}/candidates/#{id}")['candidate'])
     end
 
+    # return the full object of a specific candidate's offer
+    # @param id [String] candidates's id
+    def offer(id)
+      get_request("candidates/#{id}/offer")
+    end
+
     # create new candidate for given job
     # @param candidate  [Hash] the candidate data as described in
     #    https://workable.readme.io/docs/job-candidates-create

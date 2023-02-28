@@ -21,6 +21,10 @@ def job_candidate_json_fixture
   read_fixture 'job_candidate.json'
 end
 
+def offer_json_fixture
+  read_fixture 'offer.json'
+end
+
 def stages_json_fixture
   read_fixture 'stages.json'
 end

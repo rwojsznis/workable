@@ -58,6 +58,7 @@ client.stages     # => Array of hashes
 client.recruiters # => Array of hashes
 client.members    # => Array of hashes
 
+client.offer(shortcode)    # => Hash
 client.job_details(shortcode)    # => Hash
 client.job_questions(shortcode)  # => Array of hashes
 client.job_application_form(shortcode) # => Hash
