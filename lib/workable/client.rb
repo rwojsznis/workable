@@ -28,6 +28,7 @@ module Workable
     #      }
     #    )
     AUTH_TOKEN_URL = 'https://www.workable.com/oauth/token'
+    DEFAULT_EVENTS_CONTEXT = 'team'
 
     def initialize(options = {})
       @api_key   = options.fetch(:api_key)   { configuration_error 'Missing api_key argument'   }
@@ -257,7 +258,8 @@ module Workable
       end
     end
 
-    def events(params = {})
+    def events(params: {}, context: DEFAULT_EVENTS_CONTEXT)
+      params["context"] = context if context
       build_collection('events', :event, 'events', params)
     end
 
