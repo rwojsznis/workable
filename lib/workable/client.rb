@@ -115,6 +115,12 @@ module Workable
       @transform_to.apply(:recruiter, get_request("jobs/#{shortcode}/recruiters")['recruiters'])
     end
 
+    # return a collection of the job's stages
+    # @param shortcode [String] job short code
+    def job_stages(shortcode)
+      @transform_to.apply(:stage, get_request("jobs/#{shortcode}/stages")['stages'])
+    end
+
     # list candidates for given job
     # @param  shortcode [String] job shortcode to select candidates from
     # @param  params [Hash]   extra options like `state` or `limit`
